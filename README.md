@@ -58,7 +58,7 @@ The bridge server exposes three proxy protocols:
 
 You can use any VPN client which supports one of the protocols above.
 
-Here are some sample clients:
+Here are some recommended clients:
 * [ShadowSocks for macOS](https://github.com/shadowsocks/ShadowsocksX-NG/releases)
 * [ShadowSocks for Linux](https://github.com/shadowsocks/shadowsocks-libev)
 * [ShadowSocks for Windows](https://github.com/shadowsocks/shadowsocks-windows/releases)
@@ -66,3 +66,29 @@ Here are some sample clients:
 * [ShadowSocks for Android](https://github.com/shadowsocks/shadowsocks-android/releases)
 * [ShadowSocks for Android](https://github.com/shadowsocks/shadowsocks-android/releases)
 * [VMESS Clients](https://www.v2ray.com/en/awesome/tools.html)
+
+##### Sample ShadowSocks Configuration
+
+```
+IP: <BRIDGE-SERVER-IP>
+Port: 1012
+Algorithm/Encryption: aes-128-gcm
+Password: <SHADOWSOCKS-PASSWORD>
+```
+
+##### Sample VMESS Configuration
+
+```
+IP: <BRIDGE-SERVER-IP>
+Port: 1013
+User ID: <BRIDGE-UUID>
+AlterID: 10
+Level: 0
+Security: None
+Network: TCP
+```
+
+## P.S.
+
+This repository is forked from [v2ray-config-examples](https://github.com/xesina/v2ray-config-examples).
+Thanks to [@xesina](https://github.com/xesina) and other contributors to the original repository.
