@@ -1,0 +1,17 @@
+version: "3"
+services:
+  v2ray:
+    image: ghcr.io/miladrahimi/v2ray:latest
+    container_name: v2ray_bridge
+    restart: always
+    command: [ "v2ray", "-config=/etc/v2ray/config.json" ]
+    ports:
+      - ${HTTP_PORT:-1011}:1011
+      - ${HTTP_PORT:-1011}:1011/udp
+      - ${SHADOWSOCKS_PORT:-1012}:1012
+      - ${SHADOWSOCKS_PORT:-1012}:1012/udp
+      - ${VMESS_PORT:-1013}:1013
+      - ${VMESS_PORT:-1013}:1013/udp
+    volumes:
+      - ./config/:/etc/v2ray/
+      - ./logs:/var/log/v2ray/
