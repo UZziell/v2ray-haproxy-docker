@@ -51,13 +51,12 @@ To setup the bridge server:
 
 #### Setup Client Apps
 
-The bridge server exposes the proxy protocols below.
+The bridge server exposes these proxy protocols:
 * HTTP Proxy
 * ShadowSocks
 * VMESS
 
 You can use any VPN client which supports one of the protocols above.
-
 The following list includes some of the recommended client applications.
 * [ShadowSocks for macOS](https://github.com/shadowsocks/ShadowsocksX-NG/releases)
 * [ShadowSocks for Linux](https://github.com/shadowsocks/shadowsocks-libev)
