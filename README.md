@@ -32,14 +32,14 @@ Sample UUIDs:
 #### Upstream Server
 
 To setup the upstream server:
-1. Copy the "upstream" directory into the upstream server.
+1. Copy the "v2ray_upstream_server" directory into the upstream server.
 2. Replace `<UPSTREAM-UUID>` in the `config.json` file with the generated UUID for the upstream server.
 3. Run `docker-compose up -d`.
 
 #### Bridge Server
 
 To setup the bridge server:
-1. Copy the "bridge" directory into bridge server.
+1. Copy the "v2ray_bridge_server" directory into bridge server.
 2. Replace the following variables in the `config.json` file with appropriate values.
     * `<HTTP-USERNAME>`: An HTTP proxy username like `freedom`.
     * `<HTTP-PASSWORD>`: An HTTP proxy password like `!FR33DoM!`.
