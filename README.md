@@ -66,7 +66,7 @@ The following list includes some of the recommended client applications.
 * [Potatso Lite](https://apps.apple.com/us/app/potatso-lite/id1239860606) (iOS) [ShadowSocks]
 * [VMESS Clients](https://www.v2ray.com/en/awesome/tools.html)
 
-##### Sample ShadowSocks Configuration
+##### Sample ShadowSocks Configuration for Client Apps
 
 ```
 IP: <BRIDGE-SERVER-IP>
@@ -75,7 +75,7 @@ Algorithm/Encryption: aes-128-gcm
 Password: <SHADOWSOCKS-PASSWORD>
 ```
 
-##### Sample VMESS Configuration
+##### Sample VMESS Configuration for Client Apps
 
 ```
 IP: <BRIDGE-SERVER-IP>
