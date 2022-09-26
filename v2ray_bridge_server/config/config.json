@@ -37,7 +37,7 @@
           {
             "id": "<BRIDGE-UUID>",
             "alterId": 10,
-            "security": null
+            "security": "auto"
           }
         ]
       }
@@ -55,7 +55,7 @@
             {
               "id": "<UPSTREAM-UUID>",
               "alterId": 10,
-              "security": null
+              "security": "none"
             }
           ]
         }
