@@ -61,8 +61,8 @@ The following list includes some of the recommended client applications.
 * [ShadowSocks for macOS](https://github.com/shadowsocks/ShadowsocksX-NG/releases)
 * [ShadowSocks for Linux](https://github.com/shadowsocks/shadowsocks-libev)
 * [ShadowSocks for Windows](https://github.com/shadowsocks/shadowsocks-windows/releases)
-* [ShadowSocks for iOS](https://apps.apple.com/us/app/potatso-lite/id1239860606)
 * [ShadowSocks for Android](https://github.com/shadowsocks/shadowsocks-android/releases)
+* [ShadowLink](https://apps.apple.com/us/app/shadowlink-shadowsocks-vpn/id1439686518) (iOS) [VMESS/ShadowSocks/etc]
 * [VMESS Clients](https://www.v2ray.com/en/awesome/tools.html)
 
 ##### Sample ShadowSocks Configuration
