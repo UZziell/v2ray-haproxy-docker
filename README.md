@@ -87,5 +87,5 @@ Network: TCP
 
 ## P.S.
 
-This repository is forked from [v2ray-config-examples](https://github.com/xesina/v2ray-config-examples).
-Thanks to [@xesina](https://github.com/xesina) and other contributors to the original repository.
+This repository is kind of forked from [v2ray-config-examples](https://github.com/xesina/v2ray-config-examples).
+Thanks to [@xesina](https://github.com/xesina) and other contributors.
