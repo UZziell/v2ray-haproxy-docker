@@ -8,7 +8,7 @@ This repository contains sample Docker Compose files to run upstream and bridge 
 
 * Upstream Server: A server that has free access to the Internet.
 * Bridge Server: A server that is available to clients and has access to an upstream server.
-* Client: A user-side application with access only to the bridge server.
+* Client: A user-side application with access to the bridge server.
 
 ```
 [ Client ] <-> [ Bridge Server ] <-> [ Upstream Server ] <-> [ Internet ]
