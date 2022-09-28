@@ -99,6 +99,14 @@
             "regexp:.*\\.ir$"
           ],
           "outboundTag": "direct"
+        },
+        {
+          "type": "field",
+          "outboundTag": "Direct",
+          "ip": [
+            "geoip:ir",
+            "geoip:private"
+          ]
         }
       ]
     }
