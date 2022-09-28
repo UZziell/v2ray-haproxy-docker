@@ -21,13 +21,23 @@ This repository contains sample Docker Compose files to run upstream and bridge 
 V2Ray uses the VMESS protocol as the primary protocol.
 The VMESS protocol requires UUIDs for security reasons (instead of passwords).
 We need two UUIDs for the two V2Ray servers (upstream and bridge servers).
-You can generate UUIDs using this online tool:
+
+You can generate UUIDs:
+
+1- Online:
 
 [https://www.uuidgenerator.net](https://www.uuidgenerator.net)
+
+2- The Linux command:
+
+```bash
+cat /proc/sys/kernel/random/uuid
+```
 
 Sample UUIDs:
 * `cfc3ac34-a70d-424e-b43c-33049cf4bf31`
 * `143d98d8-ac89-465a-acb5-d8d51e1f851f`
+
 
 #### Upstream Server
 
