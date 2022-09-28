@@ -6,20 +6,6 @@
   },
   "inbounds": [
     {
-      "listen": "0.0.0.0",
-      "port": 1011,
-      "protocol": "http",
-      "settings": {
-        "udp": true,
-        "accounts": [
-          {
-            "user": "<HTTP-USERNAME>",
-            "pass": "<HTTP-PASSWORD>"
-          }
-        ]
-      }
-    },
-    {
       "port": 1012,
       "protocol": "shadowsocks",
       "settings": {
@@ -37,7 +23,7 @@
           {
             "id": "<BRIDGE-UUID>",
             "alterId": 10,
-            "security": null
+            "security": "auto"
           }
         ]
       }
@@ -55,7 +41,7 @@
             {
               "id": "<UPSTREAM-UUID>",
               "alterId": 10,
-              "security": null
+              "security": "none"
             }
           ]
         }
