@@ -41,9 +41,7 @@ To setup the upstream server:
 To setup the bridge server:
 1. Copy the "v2ray_bridge_server" directory into bridge server.
 2. Replace the following variables in the `config.json` file with appropriate values.
-    * `<HTTP-USERNAME>`: An HTTP proxy username like `freedom`.
-    * `<HTTP-PASSWORD>`: An HTTP proxy password like `!FR33DoM!`.
-    * `<SHADOWSOCKS-PASSWORD>`: A ShadowSocks password like `!FR33DoM!`.
+    * `<SHADOWSOCKS-PASSWORD>`: A password for ShadowSocks like `!FR33DoM!`.
     * `<BRIDGE-UUID>`: The generated UUID for the bridge server.
     * `<UPSTREAM-SERVER-IP>`: The upstream server IP address like `13.13.13.13`.
     * `<UPSTREAM-UUID>`: The generated UUID for the upstream server.
