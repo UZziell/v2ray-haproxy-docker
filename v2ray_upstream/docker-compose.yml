@@ -7,7 +7,6 @@ services:
     command: [ "v2ray", "-config=/etc/v2ray/config.json" ]
     ports:
       - ${VMESS_PORT:-1013}:1013
-      - ${VMESS_PORT:-1013}:1013/udp
     volumes:
       - ./config/:/etc/v2ray/
       - ./logs:/var/log/v2ray/
