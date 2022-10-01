@@ -77,7 +77,7 @@ ShadowSocks client configuration:
 ```
 IP: <BRIDGE-SERVER-IP>
 Port: 1012
-Algorithm/Encryption: aes-128-gcm
+Encryption (Algorithm): aes-128-gcm
 Password: <SHADOWSOCKS-PASSWORD>
 ```
 
@@ -88,7 +88,7 @@ Port: 1013
 User ID: <BRIDGE-UUID>
 AlterID: 10
 Level: 0
-Security: None
+Security (Encryption): aes-128-gcm
 Network: TCP
 ```
 
