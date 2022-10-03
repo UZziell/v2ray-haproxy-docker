@@ -108,7 +108,7 @@ Network: TCP
 
 ##### HTTP Protocol
 
-The HTTP proxy is for internal usage on the bridge server and would be exposed only to the 127.0.0.1 IP address.
+The HTTP proxy is for internal usage on the bridge server and would be exposed only to the 127.0.0.1 IP address without password.
 For example, the command below shows how to use it on the bridge server terminal.
 The cURL response should be the upstream server IP address.
 
