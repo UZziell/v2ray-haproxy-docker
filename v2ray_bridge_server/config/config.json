@@ -28,7 +28,7 @@
       "settings": {
         "clients": [
           {
-            "id": "<UPSTREAM-UUID>",
+            "id": "<BRIDGE-UUID>",
             "alterId": 10,
             "security": "auto"
           }
