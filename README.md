@@ -76,7 +76,7 @@ These are recommended client apps:
 * [ShadowLink for iOS](https://apps.apple.com/us/app/shadowlink-shadowsocks-vpn/id1439686518)
 * [Potatso Lite for iOS](https://apps.apple.com/us/app/potatso-lite/id1239860606)
 
-ShadowSocks client configuration:
+Client configuration:
 ```
 IP: <BRIDGE-SERVER-IP>
 Port: 1012
@@ -95,7 +95,7 @@ These are recommended client apps:
 * [ShadowLink for iOS](https://apps.apple.com/us/app/shadowlink-shadowsocks-vpn/id1439686518)
 * [v2rayNG for Android](https://github.com/2dust/v2rayNG)
 
-VMESS client configuration:
+Client configuration:
 ```
 IP: <BRIDGE-SERVER-IP>
 Port: 1013
