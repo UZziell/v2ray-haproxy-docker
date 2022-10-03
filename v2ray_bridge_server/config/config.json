@@ -28,7 +28,7 @@
       "settings": {
         "clients": [
           {
-            "id": "<BRIDGE-UUID>",
+            "id": "<UPSTREAM-UUID>",
             "alterId": 10,
             "security": "auto"
           }
@@ -37,7 +37,7 @@
     }
   ],
   "outbound": {
-    "tag": "toUpstream",
+    "tag": "next",
     "protocol": "vmess",
     "settings": {
       "vnext": [
@@ -65,10 +65,11 @@
   "outboundDetour": [
     {
       "protocol": "freedom",
-      "settings": {
-        "response": null
-      },
-      "tag": "direct"
+      "tag": "freedom"
+    },
+    {
+      "protocol": "blackhole",
+      "tag": "blackhole"
     }
   ],
   "dns": {
@@ -84,16 +85,18 @@
       "rules": [
         {
           "type": "field",
-          "outboundTag": "direct",
+          "outboundTag": "freedom",
           "domain": [
             "regexp:.*\\.ir$"
+          ],
+          "ip": [
+            "geoip:ir"
           ]
         },
         {
           "type": "field",
-          "outboundTag": "direct",
+          "outboundTag": "blackhole",
           "ip": [
-            "geoip:ir",
             "geoip:private"
           ]
         }
