@@ -109,13 +109,19 @@ Network: TCP
 ##### HTTP Protocol
 
 The HTTP proxy is for internal usage on the bridge server and would be exposed only to the 127.0.0.1 IP address without password.
-You can use it on your local device using port forwarding (`ssh -NL 1011:0.0.0.0:1011`), as well.
 For example, the command below shows how to use it on the bridge server terminal.
 The cURL response should be the upstream server IP address.
 
 ```shell
-$ export http_proxy=http://127.0.0.1:1011;export https_proxy=http://127.0.0.1:1011;
-$ curl ifconfig.io
+export http_proxy=http://127.0.0.1:1011;export https_proxy=http://127.0.0.1:1011;
+curl ifconfig.io
+```
+
+You can use the HTTP proxy on your local device using port forwarding, as well.
+The following command makes the HTTP proxy on the bridge server available to the local device and private network it uses.
+
+```
+ssh -NL 1011:0.0.0.0:1011 root@<BRIDGE-SERVER-IP>
 ```
 
 ## P.S.
