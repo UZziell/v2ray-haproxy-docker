@@ -57,21 +57,24 @@ To setup the bridge server:
     * `<UPSTREAM-UUID>`: The generated UUID for the upstream server.
 3. Run `docker-compose up -d`. 
 
-#### Setup Client Apps
+#### Clients
 
 The bridge server exposes these proxy protocols:
+* HTTP
 * ShadowSocks
 * VMESS
 
-You can use any VPN client which supports one of the protocols above.
-The list below includes some of the recommended client applications.
+##### ShadowSocks Protocol
+
+ShadowSocks is a popular proxy protocol.
+You can find many client apps to use the ShadowSocks proxy on your devices.
+These are recommended client apps:
 * [ShadowSocks for macOS](https://github.com/shadowsocks/ShadowsocksX-NG/releases)
 * [ShadowSocks for Linux](https://github.com/shadowsocks/shadowsocks-libev)
 * [ShadowSocks for Windows](https://github.com/shadowsocks/shadowsocks-windows/releases)
 * [ShadowSocks for Android](https://github.com/shadowsocks/shadowsocks-android/releases)
-* [v2rayNG](https://github.com/2dust/v2rayNG) (Android) [VMESS]
-* [ShadowLink](https://apps.apple.com/us/app/shadowlink-shadowsocks-vpn/id1439686518) (iOS) [VMESS & ShadowSocks]
-* [Potatso Lite](https://apps.apple.com/us/app/potatso-lite/id1239860606) (iOS) [ShadowSocks]
+* [ShadowLink for iOS](https://apps.apple.com/us/app/shadowlink-shadowsocks-vpn/id1439686518)
+* [Potatso Lite for iOS](https://apps.apple.com/us/app/potatso-lite/id1239860606)
 
 ShadowSocks client configuration:
 ```
@@ -81,15 +84,37 @@ Encryption (Algorithm): aes-128-gcm
 Password: <SHADOWSOCKS-PASSWORD>
 ```
 
+##### VMESS Protocol
+
+The VMESS proxy protocol is the recommended one.
+It's the primary protocol that V2Ray provides.
+These are recommended client apps:
+* [V2RayX for macOS](https://github.com/Cenmrev/V2RayX/releases)
+* [v2ray-core for Linux](https://github.com/v2ray/v2ray-core)
+* [v2rayN for Windows](https://github.com/2dust/v2rayN/releases)
+* [ShadowLink for iOS](https://apps.apple.com/us/app/shadowlink-shadowsocks-vpn/id1439686518)
+* [v2rayNG for Android](https://github.com/2dust/v2rayNG)
+
 VMESS client configuration:
 ```
 IP: <BRIDGE-SERVER-IP>
 Port: 1013
 User ID: <BRIDGE-UUID>
-AlterID: 10
+Alter ID: 10
 Level: 0
 Security (Encryption): aes-128-gcm
 Network: TCP
+```
+
+##### HTTP Protocol
+
+The HTTP proxy is for internal usage on the bridge server and would be exposed only to the 127.0.0.1 IP address.
+For example, the command below shows how to use it on the bridge server terminal.
+The cURL response should be the upstream server IP address.
+
+```shell
+$ export http_proxy=http://127.0.0.1:1011;export https_proxy=http://127.0.0.1:1011;
+$ curl ifconfig.io
 ```
 
 ## P.S.
