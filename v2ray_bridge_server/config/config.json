@@ -6,6 +6,13 @@
   },
   "inbounds": [
     {
+      "listen": "0.0.0.0",
+      "port": 1011,
+      "protocol": "http",
+      "settings": {}
+    },
+    {
+      "listen": "0.0.0.0",
       "port": 1012,
       "protocol": "shadowsocks",
       "settings": {
@@ -15,8 +22,8 @@
       }
     },
     {
-      "port": 1013,
       "listen": "0.0.0.0",
+      "port": 1013,
       "protocol": "vmess",
       "settings": {
         "clients": [
@@ -30,7 +37,7 @@
     }
   ],
   "outbound": {
-    "tag": "agentout",
+    "tag": "toUpstream",
     "protocol": "vmess",
     "settings": {
       "vnext": [
@@ -62,15 +69,6 @@
         "response": null
       },
       "tag": "direct"
-    },
-    {
-      "protocol": "blackhole",
-      "settings": {
-        "response": {
-          "type": "http"
-        }
-      },
-      "tag": "blockout"
     }
   ],
   "dns": {
@@ -86,14 +84,14 @@
       "rules": [
         {
           "type": "field",
+          "outboundTag": "direct",
           "domain": [
             "regexp:.*\\.ir$"
-          ],
-          "outboundTag": "direct"
+          ]
         },
         {
           "type": "field",
-          "outboundTag": "Direct",
+          "outboundTag": "direct",
           "ip": [
             "geoip:ir",
             "geoip:private"
