@@ -5,8 +5,8 @@
     "loglevel": "warning"
   },
   "inbound": {
-    "port": 1013,
     "listen": "0.0.0.0",
+    "port": 1013,
     "protocol": "vmess",
     "settings": {
       "clients": [
@@ -38,7 +38,6 @@
       "rules": [
         {
           "type": "field",
-          "port": null,
           "outboundTag": "blackhole",
           "ip": [
             "geoip:private"
