@@ -1,17 +1,17 @@
 # V2Ray Docker Compose
 
-This repository contains sample Docker Compose files to run upstream and bridge V2Ray servers.
+This repository contains sample Docker Compose files to run V2Ray upstream and bridge servers.
 
 ## Documentation
 
 ### Terminology
 
 * Upstream Server: A server that has free access to the Internet.
-* Bridge Server: A server that is available to clients and has access to an upstream server.
+* Bridge Server: A server that is available to clients and has access to the upstream server.
 * Client: A user-side application with access to the bridge server.
 
 ```
-[ Client ] <-> [ Bridge Server ] <-> [ Upstream Server ] <-> [ Internet ]
+(Client) <-> [ Bridge Server ] <-> [ Upstream Server ] <-> (Internet)
 ```
 
 ### Setup
@@ -22,39 +22,38 @@ V2Ray uses the VMESS protocol as the primary protocol.
 The VMESS protocol requires UUIDs for security reasons (instead of passwords).
 We need two UUIDs for the two V2Ray servers (upstream and bridge servers).
 
-You can generate UUIDs:
+You can generate UUIDs using:
 
-1- Online:
-
-[https://www.uuidgenerator.net](https://www.uuidgenerator.net)
-
-2- The Linux command:
+* This Linux command:
 
 ```bash
 cat /proc/sys/kernel/random/uuid
 ```
 
-Sample UUIDs:
+* This online tool:
+
+[https://www.uuidgenerator.net](https://www.uuidgenerator.net)
+
+Sample generated UUIDs:
 * `cfc3ac34-a70d-424e-b43c-33049cf4bf31`
 * `143d98d8-ac89-465a-acb5-d8d51e1f851f`
-
 
 #### Upstream Server
 
 To setup the upstream server:
 1. Copy the "v2ray_upstream_server" directory into the upstream server.
-2. Replace `<UPSTREAM-UUID>` in the `config.json` file with the generated UUID for the upstream server.
+2. Replace `<UPSTREAM-UUID>` in the `config.json` file with one of the generated UUIDs.
 3. Run `docker-compose up -d`.
 
 #### Bridge Server
 
 To setup the bridge server:
-1. Copy the "v2ray_bridge_server" directory into bridge server.
+1. Copy the "v2ray_bridge_server" directory into the bridge server.
 2. Replace the following variables in the `config.json` file with appropriate values.
-    * `<SHADOWSOCKS-PASSWORD>`: A password for ShadowSocks like `!FR33DoM!`.
+    * `<SHADOWSOCKS-PASSWORD>`: A password for ShadowSocks users like `!FR33DoM!`.
     * `<BRIDGE-UUID>`: The generated UUID for the bridge server.
     * `<UPSTREAM-SERVER-IP>`: The upstream server IP address like `13.13.13.13`.
-    * `<UPSTREAM-UUID>`: The generated UUID for the upstream server.
+    * `<UPSTREAM-UUID>`: The used UUID for the upstream server.
 3. Run `docker-compose up -d`. 
 
 #### Clients
@@ -78,9 +77,9 @@ These are recommended client apps:
 
 Client configuration:
 ```
-IP: <BRIDGE-SERVER-IP>
+IP Address: <BRIDGE-SERVER-IP>
 Port: 1012
-Encryption (Algorithm): aes-128-gcm
+Encryption/Method/Algorithm: aes-128-gcm
 Password: <SHADOWSOCKS-PASSWORD>
 ```
 
@@ -97,31 +96,31 @@ These are recommended client apps:
 
 Client configuration:
 ```
-IP: <BRIDGE-SERVER-IP>
+IP Address: <BRIDGE-SERVER-IP>
 Port: 1013
-User ID: <BRIDGE-UUID>
+ID/UUID/UserID: <BRIDGE-UUID>
 Alter ID: 10
 Level: 0
-Security (Encryption): aes-128-gcm
+Security/Method/Encryption: aes-128-gcm
 Network: TCP
 ```
 
 ##### HTTP Protocol
 
-The HTTP proxy is for internal usage on the bridge server and would be exposed only to the 127.0.0.1 IP address without password.
+The HTTP proxy is appropriate for internal usage on the bridge server and would be exposed only to the 127.0.0.1 IP address without a password.
 For example, the command below shows how to use it on the bridge server terminal.
 The cURL response should be the upstream server IP address.
 
 ```shell
-export http_proxy=http://127.0.0.1:1011;export https_proxy=http://127.0.0.1:1011;
+export http_proxy=http://127.0.0.1:1011; export https_proxy=http://127.0.0.1:1011;
 curl ifconfig.io
 ```
 
-You can use the HTTP proxy on your local device using port forwarding, as well.
-The following command makes the HTTP proxy on the bridge server available to the local device and private network it uses.
+You can use the HTTP proxy on your local devices using port forwarding, as well.
+The following SSH command makes the HTTP proxy available to the local device and private network it uses.
 
 ```
-ssh -NL 1011:0.0.0.0:1011 root@<BRIDGE-SERVER-IP>
+ssh -vNL 1011:0.0.0.0:1011 root@<BRIDGE-SERVER-IP>
 ```
 
 ## P.S.
