@@ -109,17 +109,15 @@ Network: TCP
 
 The HTTP proxy is appropriate for internal usage on the bridge server and would be exposed only to the 127.0.0.1 IP address without a password.
 For example, the command below shows how to use it on the bridge server terminal.
-The cURL response should be the upstream server IP address.
 
 ```shell
 export {http,https}_proxy="http://127.0.0.1:1011"
 export {HTTP,HTTPS}_PROXY="http://127.0.0.1:1011"
 
-# Sample cURL request through HTTP proxy
+# This "curl" should return the upstream server IP address
 curl ifconfig.io
 
-# Sample "sudo" command
-# It needs the -E parameter to use HTTP proxy and other envs
+# The "sudo" command needs the -E parameter to use HTTP proxy and other envs
 sudo -E apt install docker
 
 unset {http,https}_proxy
