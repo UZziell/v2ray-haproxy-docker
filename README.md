@@ -41,14 +41,14 @@ Sample generated UUIDs:
 #### Upstream Server
 
 To setup the upstream server:
-1. Copy the "v2ray_upstream_server" directory into the upstream server.
+1. Copy the "v2ray-upstream-server" directory into the upstream server.
 2. Replace `<UPSTREAM-UUID>` in the `config.json` file with one of the generated UUIDs.
 3. Run `docker-compose up -d`.
 
 #### Bridge Server
 
 To setup the bridge server:
-1. Copy the "v2ray_bridge_server" directory into the bridge server.
+1. Copy the "v2ray-bridge-server" directory into the bridge server.
 2. Replace the following variables in the `config.json` file with appropriate values.
     * `<SHADOWSOCKS-PASSWORD>`: A password for ShadowSocks users like `!FR33DoM!`.
     * `<BRIDGE-UUID>`: The generated UUID for the bridge server.
