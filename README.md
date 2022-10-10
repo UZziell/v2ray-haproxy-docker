@@ -118,7 +118,8 @@ export {HTTP,HTTPS}_PROXY="http://127.0.0.1:1011"
 # Sample cURL request through HTTP proxy
 curl ifconfig.io
 
-# Sample "sudo" command (the -E parameter is required) 
+# Sample "sudo" command
+# It needs the -E parameter to use HTTP proxy and other envs
 sudo -E apt install docker
 
 unset {http,https}_proxy
@@ -131,9 +132,6 @@ The following SSH command makes the HTTP proxy available to the local device and
 ```
 ssh -vNL 1011:0.0.0.0:1011 root@<BRIDGE-SERVER-IP>
 ```
-
-`-E` use your current user environments.
-
 
 ## P.S.
 
