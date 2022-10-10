@@ -112,8 +112,9 @@ For example, the command below shows how to use it on the bridge server terminal
 The cURL response should be the upstream server IP address.
 
 ```shell
-export http_proxy=http://127.0.0.1:1011; export https_proxy=http://127.0.0.1:1011;
+export {http,https}_proxy="http://127.0.0.1:1011"; export {HTTP,HTTPS}_PROXY="http://127.0.0.1:1011";
 curl ifconfig.io
+unset {http,https}_proxy; unset {HTTP,HTTPS}_PROXY;
 ```
 
 You can use the HTTP proxy on your local devices using port forwarding, as well.
