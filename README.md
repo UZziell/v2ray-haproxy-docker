@@ -115,7 +115,11 @@ The cURL response should be the upstream server IP address.
 export {http,https}_proxy="http://127.0.0.1:1011"
 export {HTTP,HTTPS}_PROXY="http://127.0.0.1:1011"
 
+# Sample cURL request through HTTP proxy
 curl ifconfig.io
+
+# Sample "sudo" command (the -E parameter is required) 
+sudo -E apt install docker
 
 unset {http,https}_proxy
 unset {HTTP,HTTPS}_PROXY
@@ -126,17 +130,6 @@ The following SSH command makes the HTTP proxy available to the local device and
 
 ```
 ssh -vNL 1011:0.0.0.0:1011 root@<BRIDGE-SERVER-IP>
-```
-
-##### Use proxy in APT package manager
-
-If you need pass your `apt` commands over http proxy, you can use `apt` as follows:
-
-```
-sudo -E apt update
-sudo -E apt upgrade
-sudo -E apt install docker
-and ...
 ```
 
 `-E` use your current user environments.
