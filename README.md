@@ -128,6 +128,20 @@ The following SSH command makes the HTTP proxy available to the local device and
 ssh -vNL 1011:0.0.0.0:1011 root@<BRIDGE-SERVER-IP>
 ```
 
+##### Use proxy in APT package manager
+
+If you need pass your `apt` commands over http proxy, you can use `apt` as follows:
+
+```
+sudo -E apt update
+sudo -E apt upgrade
+sudo -E apt install docker
+and ...
+```
+
+`-E` use your current user environments.
+
+
 ## P.S.
 
 This repository is kind of forked from [v2ray-config-examples](https://github.com/xesina/v2ray-config-examples).
