@@ -78,7 +78,7 @@ These are recommended client apps:
 Client configuration:
 ```
 IP Address: <BRIDGE-SERVER-IP>
-Port: 1012
+Port: 1210
 Encryption/Method/Algorithm: aes-128-gcm
 Password: <SHADOWSOCKS-PASSWORD>
 ```
@@ -97,7 +97,7 @@ These are recommended client apps:
 Client configuration:
 ```
 IP Address: <BRIDGE-SERVER-IP>
-Port: 1013
+Port: 1310
 ID/UUID/UserID: <BRIDGE-UUID>
 Alter ID: 10
 Level: 0
@@ -111,8 +111,8 @@ The HTTP proxy is appropriate for internal usage on the bridge server and would 
 For example, the command below shows how to use it on the bridge server terminal.
 
 ```shell
-export {http,https}_proxy="http://127.0.0.1:1011"
-export {HTTP,HTTPS}_PROXY="http://127.0.0.1:1011"
+export {http,https}_proxy="http://127.0.0.1:1110"
+export {HTTP,HTTPS}_PROXY="http://127.0.0.1:1110"
 
 # This "curl" should return the upstream server IP address
 curl ifconfig.io
@@ -128,10 +128,10 @@ You can use the HTTP proxy on your local devices using port forwarding, as well.
 The following SSH command makes the HTTP proxy available to the local device and private network it uses.
 
 ```shell
-ssh -vNL 1011:0.0.0.0:1011 root@<BRIDGE-SERVER-IP>
+ssh -vNL 1110:0.0.0.0:1110 root@<BRIDGE-SERVER-IP>
 
-export {http,https}_proxy="http://127.0.0.1:1011"
-export {HTTP,HTTPS}_PROXY="http://127.0.0.1:1011"
+export {http,https}_proxy="http://127.0.0.1:1110"
+export {HTTP,HTTPS}_PROXY="http://127.0.0.1:1110"
 
 # ...
 ```
