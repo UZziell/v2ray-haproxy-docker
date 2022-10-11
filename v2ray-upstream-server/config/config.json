@@ -17,8 +17,8 @@
         }
       ]
     },
-    "streamSettings":{
-      "network":"ws"
+    "streamSettings": {
+      "network": "ws"
     }
   },
   "outbound": {
