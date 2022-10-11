@@ -27,20 +27,20 @@
     "settings": {
       "vnext": [
         {
-          "address": "<UPSTREAM-SERVER-IP>",
+          "address": "<BRIDGE-IP>",
           "port": 1310,
           "users": [
             {
-              "id": "<UPSTREAM-UUID>",
+              "id": "<BRIDGE-UUID>",
               "alterId": 10,
-              "security": "none"
+              "security": "aes-128-gcm"
             }
           ]
         }
       ]
     },
     "streamSettings": {
-      "network": "ws"
+      "network": "tcp"
     },
     "mux": {
       "enabled": true

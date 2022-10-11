@@ -52,7 +52,7 @@ To setup the bridge server:
 2. Replace the following variables in the `config.json` file with appropriate values.
     * `<SHADOWSOCKS-PASSWORD>`: A password for ShadowSocks users like `!FR33DoM!`.
     * `<BRIDGE-UUID>`: The generated UUID for the bridge server.
-    * `<UPSTREAM-SERVER-IP>`: The upstream server IP address like `13.13.13.13`.
+    * `<UPSTREAM-IP>`: The upstream server IP address like `13.13.13.13`.
     * `<UPSTREAM-UUID>`: The used UUID for the upstream server.
 3. Run `docker-compose up -d`. 
 
@@ -77,7 +77,7 @@ These are recommended client apps:
 
 Client configuration:
 ```
-IP Address: <BRIDGE-SERVER-IP>
+IP Address: <BRIDGE-IP>
 Port: 1210
 Encryption/Method/Algorithm: aes-128-gcm
 Password: <SHADOWSOCKS-PASSWORD>
@@ -96,7 +96,7 @@ These are recommended client apps:
 
 Client configuration:
 ```
-IP Address: <BRIDGE-SERVER-IP>
+IP Address: <BRIDGE-IP>
 Port: 1310
 ID/UUID/UserID: <BRIDGE-UUID>
 Alter ID: 10
@@ -128,7 +128,7 @@ You can use the HTTP proxy on your local devices using port forwarding, as well.
 The following SSH command makes the HTTP proxy available to the local device and private network it uses.
 
 ```shell
-ssh -vNL 1110:0.0.0.0:1110 root@<BRIDGE-SERVER-IP>
+ssh -vNL 1110:0.0.0.0:1110 root@<BRIDGE-IP>
 
 export {http,https}_proxy="http://127.0.0.1:1110"
 export {HTTP,HTTPS}_PROXY="http://127.0.0.1:1110"

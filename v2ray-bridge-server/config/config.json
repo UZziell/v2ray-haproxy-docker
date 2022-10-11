@@ -42,7 +42,7 @@
     "settings": {
       "vnext": [
         {
-          "address": "<UPSTREAM-SERVER-IP>",
+          "address": "<UPSTREAM-IP>",
           "port": 1310,
           "users": [
             {
