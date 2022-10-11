@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+  v2ray:
+    image: ghcr.io/miladrahimi/v2ray:latest
+    container_name: v2ray_client
+    restart: always
+    command: [ "v2ray", "-config=/etc/v2ray/config.json" ]
+    ports:
+      - 127.0.0.1:10808:10808 # socks port
+      - 127.0.0.1:10809:10809 # http port
+    volumes:
+      - ./config/:/etc/v2ray/
