@@ -8,7 +8,9 @@ services:
     command: [ "v2ray", "-config=/etc/v2ray/config.json" ]
     ports:
       - 127.0.0.1:${SOCKS_PORT:-1010}:1010
+      - 127.0.0.1:${SOCKS_PORT:-1010}:1010/udp
       - 127.0.0.1:${HTTP_PORT:-1110}:1110
+      - 127.0.0.1:${HTTP_PORT:-1110}:1110/udp
     volumes:
       - ./config/:/etc/v2ray/
       - ./logs:/var/log/v2ray/

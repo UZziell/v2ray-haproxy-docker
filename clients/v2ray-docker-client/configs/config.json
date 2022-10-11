@@ -7,7 +7,7 @@
   "inbounds": [
     {
       "listen": "0.0.0.0",
-      "port": 10101,
+      "port": 1010,
       "protocol": "socks",
       "settings": {
         "auth": "noauth",
