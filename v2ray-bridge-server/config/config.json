@@ -80,7 +80,7 @@
     ]
   },
   "routing": {
-    "strategy": "rules",
+    "domainStrategy": "IPIfNonMatch",
     "settings": {
       "rules": [
         {
