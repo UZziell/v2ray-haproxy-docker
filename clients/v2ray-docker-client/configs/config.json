@@ -7,33 +7,18 @@
   "inbounds": [
     {
       "listen": "0.0.0.0",
+      "port": 10101,
+      "protocol": "socks",
+      "settings": {
+        "auth": "noauth",
+        "udp": true
+      }
+    },
+    {
+      "listen": "0.0.0.0",
       "port": 1110,
       "protocol": "http",
       "settings": {}
-    },
-    {
-      "listen": "0.0.0.0",
-      "port": 1210,
-      "protocol": "shadowsocks",
-      "settings": {
-        "method": "aes-128-gcm",
-        "password": "<SHADOWSOCKS-PASSWORD>",
-        "level": 1
-      }
-    },
-    {
-      "listen": "0.0.0.0",
-      "port": 1310,
-      "protocol": "vmess",
-      "settings": {
-        "clients": [
-          {
-            "id": "<BRIDGE-UUID>",
-            "alterId": 10,
-            "security": "auto"
-          }
-        ]
-      }
     }
   ],
   "outbound": {
@@ -66,10 +51,6 @@
     {
       "protocol": "freedom",
       "tag": "freedom"
-    },
-    {
-      "protocol": "blackhole",
-      "tag": "blackhole"
     }
   ],
   "dns": {
@@ -90,6 +71,7 @@
             "regexp:.*\\.ir$"
           ],
           "ip": [
+            "geoip:private",
             "geoip:ir",
             "0.0.0.0/8",
             "10.0.0.0/8",
@@ -152,13 +134,6 @@
             "::1/128",
             "fc00::/7",
             "fe80::/10"
-          ]
-        },
-        {
-          "type": "field",
-          "outboundTag": "blackhole",
-          "ip": [
-            "geoip:private"
           ]
         }
       ]

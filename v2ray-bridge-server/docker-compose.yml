@@ -1,4 +1,5 @@
 version: "3"
+
 services:
   v2ray:
     image: ghcr.io/miladrahimi/v2ray:latest
@@ -6,9 +7,9 @@ services:
     restart: always
     command: [ "v2ray", "-config=/etc/v2ray/config.json" ]
     ports:
-      - 127.0.0.1:${HTTP_PORT:-1011}:1011
-      - ${SHADOWSOCKS_PORT:-1012}:1012
-      - ${VMESS_PORT:-1013}:1013
+      - 127.0.0.1:${HTTP_PORT:-1110}:1110
+      - ${SHADOWSOCKS_PORT:-1210}:1210
+      - ${VMESS_PORT:-1310}:1310
     volumes:
       - ./config/:/etc/v2ray/
       - ./logs:/var/log/v2ray/
