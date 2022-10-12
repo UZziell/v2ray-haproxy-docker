@@ -125,7 +125,7 @@ unset {HTTP,HTTPS}_PROXY
 ```
 
 You can use the HTTP proxy on your local devices using port forwarding, as well.
-The following SSH command makes the HTTP proxy available to the local device and private network it uses.
+The following SSH command makes the HTTP proxy available to the local device and the private network it uses.
 
 ```shell
 ssh -vNL 1110:0.0.0.0:1110 root@<BRIDGE-IP>
