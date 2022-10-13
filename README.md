@@ -59,9 +59,10 @@ To setup the bridge server:
 #### Clients
 
 The bridge server exposes these proxy protocols:
-* HTTP
 * ShadowSocks
 * VMESS
+* HTTP
+* SOCKS
 
 ##### ShadowSocks Protocol
 
@@ -105,7 +106,7 @@ Security/Method/Encryption: aes-128-gcm
 Network: TCP
 ```
 
-##### HTTP Protocol
+##### HTTP & SOCKS Protocol
 
 Moved here: [HTTP_SOCKS_PROTOCOLS.md](HTTP_SOCKS_PROTOCOLS.md)
 
