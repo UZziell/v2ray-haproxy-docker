@@ -24,7 +24,7 @@ We need two UUIDs for the two V2Ray servers (upstream and bridge servers).
 
 You can generate UUIDs using:
 
-* This Linux command: ```bash cat /proc/sys/kernel/random/uuid```
+* This Linux command: ```cat /proc/sys/kernel/random/uuid```
 
 * This online tool: [https://www.uuidgenerator.net](https://www.uuidgenerator.net)
 
