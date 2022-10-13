@@ -25,8 +25,8 @@
       "port": 1210,
       "protocol": "shadowsocks",
       "settings": {
-        "method": "aes-128-gcm",
         "password": "<SHADOWSOCKS-PASSWORD>",
+        "method": "aes-128-gcm",
         "level": 0
       }
     },
