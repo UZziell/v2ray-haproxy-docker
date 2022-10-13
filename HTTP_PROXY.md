@@ -1,27 +1,29 @@
-##### HTTP Protocol
+# HTTP & SOCKS5 Protocols
 
-The HTTP proxy is appropriate for internal usage on the bridge server and would be exposed only to the 127.0.0.1 IP address without a password.
-For example, the command below shows how to use it on the bridge server terminal.
+The HTTP and SOCKS proxy protocols are appropriate for internal usage on the bridge server and port forwarding.
+It would expose those ports to the passwordless 127.0.0.1 IP address.
+For example, the command below shows how to use the HTTP proxy on the bridge server.
 
 ```shell
 export {http,https}_proxy="http://127.0.0.1:1110"
 export {HTTP,HTTPS}_PROXY="http://127.0.0.1:1110"
 
-# This "curl" should return the upstream server IP address
+# This "curl" should return the upstream IP (not bridge!)
 curl ifconfig.io
 
-# The "sudo" command needs the -E parameter to use HTTP proxy and other envs
+# The "sudo" command needs the -E parameter to use HTTP/SOCKS proxy and other envs
 sudo -E apt install docker
 
 unset {http,https}_proxy
 unset {HTTP,HTTPS}_PROXY
 ```
 
-You can use the HTTP proxy on your local devices using port forwarding, as well.
+You can use the HTTP or SOCKS proxies on your local devices using port forwarding.
 The following SSH command makes the HTTP proxy available to the local device and the private network it uses.
 
 ```shell
-ssh -vNL 1110:0.0.0.0:1110 root@<BRIDGE-IP>
+ssh -vNL 1110:0.0.0.0:1110 root@13.13.13.13
+# ssh -vNL <LOCAL-HTTP-PORT>:<LOCAL-IP-ADDRESS>:<REMOTE-HTTP-PORT> <USER>@<BRIDGE-IP>
 
 export {http,https}_proxy="http://127.0.0.1:1110"
 export {HTTP,HTTPS}_PROXY="http://127.0.0.1:1110"
@@ -29,7 +31,7 @@ export {HTTP,HTTPS}_PROXY="http://127.0.0.1:1110"
 # ...
 ```
 
-You can add one of the following lines to the `$HOME/.ssh/ssh_config` file to use the HTTP or SOCKS proxies in your SSH connections.
+You can add the following line to the `$HOME/.ssh/ssh_config` file to use the HTTP or SOCKS proxies in your SSH connections.
 
 * HTTP: ```ProxyCommand /usr/bin/nc -X connect -x 127.0.0.1:HTTP_PROXY_PORT %h %p```
 * SOCKS: ```ProxyCommand /usr/bin/nc -X 5 -x 127.0.0.1:SOCKS_PROXY_PORT %h %p```
