@@ -66,7 +66,6 @@ These are recommended client apps:
 * [Shadowsocks for Windows](https://github.com/shadowsocks/shadowsocks-windows/releases)
 * [Shadowsocks for Android](https://github.com/shadowsocks/shadowsocks-android/releases)
 * [ShadowLink for iOS](https://apps.apple.com/us/app/shadowlink-shadowsocks-vpn/id1439686518)
-* [Potatso Lite for iOS](https://apps.apple.com/us/app/potatso-lite/id1239860606)
 
 Client configuration:
 ```
