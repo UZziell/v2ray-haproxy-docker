@@ -42,7 +42,7 @@ To setup the upstream server:
 To setup the bridge server:
 1. Copy the "v2ray-bridge-server" directory into the bridge server.
 2. Replace the following variables in the `config.json` file with appropriate values.
-    * `<SHADOWSOCKS-PASSWORD>`: A password for ShadowSocks users like `!FR33DoM!`.
+    * `<SHADOWSOCKS-PASSWORD>`: A password for Shadowsocks users like `!FR33DoM!`.
     * `<BRIDGE-UUID>`: The generated UUID for the bridge server.
     * `<UPSTREAM-IP>`: The upstream server IP address like `13.13.13.13`.
     * `<UPSTREAM-UUID>`: The used UUID for the upstream server.
@@ -51,20 +51,20 @@ To setup the bridge server:
 #### Clients
 
 The bridge server exposes these proxy protocols:
-* ShadowSocks
+* Shadowsocks
 * VMESS
 * HTTP
 * SOCKS
 
-##### ShadowSocks Protocol
+##### Shadowsocks Protocol
 
-ShadowSocks is a popular proxy protocol.
-You can find many client apps to use the ShadowSocks proxy on your devices.
+Shadowsocks is a popular proxy protocol.
+You can find many client apps to use the Shadowsocks proxy on your devices.
 These are recommended client apps:
-* [ShadowSocks for macOS](https://github.com/shadowsocks/ShadowsocksX-NG/releases)
-* [ShadowSocks for Linux](https://github.com/shadowsocks/shadowsocks-libev)
-* [ShadowSocks for Windows](https://github.com/shadowsocks/shadowsocks-windows/releases)
-* [ShadowSocks for Android](https://github.com/shadowsocks/shadowsocks-android/releases)
+* [Shadowsocks for macOS](https://github.com/shadowsocks/ShadowsocksX-NG/releases)
+* [Shadowsocks for Linux](https://github.com/shadowsocks/shadowsocks-libev)
+* [Shadowsocks for Windows](https://github.com/shadowsocks/shadowsocks-windows/releases)
+* [Shadowsocks for Android](https://github.com/shadowsocks/shadowsocks-android/releases)
 * [ShadowLink for iOS](https://apps.apple.com/us/app/shadowlink-shadowsocks-vpn/id1439686518)
 * [Potatso Lite for iOS](https://apps.apple.com/us/app/potatso-lite/id1239860606)
 
