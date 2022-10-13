@@ -136,24 +136,13 @@ export {HTTP,HTTPS}_PROXY="http://127.0.0.1:1110"
 # ...
 ```
 
+You can add the following line to the `$HOME/.ssh/ssh_config` file to use the HTTP or SOCKS proxies in your SSH connections.
 
-
-##### To use ssh over http proxy you can add this line at $HOME/.ssh/ssh_config
-```
-ProxyCommand /usr/bin/nc -X connect -x 127.0.0.1:YOUR_HTTP_CLIENT_PROXY_PORT %h %p
-
-Then you can use ssh:
-
-ssh root@1.2.3.4 -p 22
-```
-
-##### To use ssh over socks5 proxy you can add this line at $HOME/.ssh/ssh_config
-```
-ProxyCommand /usr/bin/nc -X 5 -x 127.0.0.1:YOUR_SOCKS_CLIENT_PROXY_PORT %h %p
-
-Then you can use ssh:
-
-ssh root@1.2.3.4 -p 22
+```shell
+# HTTP:
+ProxyCommand /usr/bin/nc -X connect -x 127.0.0.1:HTTP_CLIENT_PROXY_PORT %h %p
+# SOCKS:
+ProxyCommand /usr/bin/nc -X 5 -x 127.0.0.1:SOCKS_CLIENT_PROXY_PORT %h %p
 ```
 
 ## P.S.
