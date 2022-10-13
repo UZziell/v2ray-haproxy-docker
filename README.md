@@ -136,6 +136,26 @@ export {HTTP,HTTPS}_PROXY="http://127.0.0.1:1110"
 # ...
 ```
 
+
+
+##### To use ssh over http proxy you can add this line at $HOME/.ssh/ssh_config
+```
+ProxyCommand /usr/bin/nc -X connect -x 127.0.0.1:YOUR_HTTP_CLIENT_PROXY_PORT %h %p
+
+Then you can use ssh:
+
+ssh root@1.2.3.4 -p 22
+```
+
+##### To use ssh over socks5 proxy you can add this line at $HOME/.ssh/ssh_config
+```
+ProxyCommand /usr/bin/nc -X 5 -x 127.0.0.1:YOUR_SOCKS_CLIENT_PROXY_PORT %h %p
+
+Then you can use ssh:
+
+ssh root@1.2.3.4 -p 22
+```
+
 ## P.S.
 
 This repository is kind of forked from [v2ray-config-examples](https://github.com/xesina/v2ray-config-examples).
