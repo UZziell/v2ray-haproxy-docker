@@ -27,7 +27,7 @@
       "settings": {
         "method": "aes-128-gcm",
         "password": "<SHADOWSOCKS-PASSWORD>",
-        "level": 1
+        "level": 0
       }
     },
     {
