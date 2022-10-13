@@ -1,7 +1,7 @@
 # HTTP & SOCKS Protocols
 
 The HTTP and SOCKS (SOCKS5) proxy protocols are appropriate for internal usage on the bridge server and port forwarding.
-It would expose those ports to the passwordless 127.0.0.1 IP address.
+They would be exposed to the 127.0.0.1 IP address without passwords.
 For example, the command below shows how to use the HTTP proxy on the bridge server.
 
 ```shell
