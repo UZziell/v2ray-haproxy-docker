@@ -107,7 +107,7 @@ Network: TCP
 
 ##### HTTP Protocol
 
-Moved here: [HTTP_SOCKS_PROTOCOLS.md](docs/HTTP_SOCKS_PROTOCOLS.md)
+Moved here: [HTTP_SOCKS_PROTOCOLS.md](HTTP_SOCKS_PROTOCOLS.md)
 
 ## P.S.
 
