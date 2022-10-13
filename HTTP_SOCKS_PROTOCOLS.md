@@ -2,7 +2,10 @@
 
 The HTTP and SOCKS (SOCKS5) proxy protocols are appropriate for internal usage on the bridge server and port forwarding.
 They would be exposed to the 127.0.0.1 IP address without passwords.
-For example, the command below shows how to use the HTTP proxy on the bridge server.
+
+## On the bridge server
+
+The command below shows how to use the HTTP proxy on the bridge server.
 
 ```shell
 export {http,https}_proxy="http://127.0.0.1:1110"
@@ -18,6 +21,8 @@ unset {http,https}_proxy
 unset {HTTP,HTTPS}_PROXY
 ```
 
+## On the local devices
+
 You can use the HTTP or SOCKS proxies on your local devices using port forwarding.
 The following SSH command makes the HTTP proxy available to the local device and the private network it uses.
 
@@ -29,6 +34,8 @@ export {http,https}_proxy="http://127.0.0.1:1110"
 export {HTTP,HTTPS}_PROXY="http://127.0.0.1:1110"
 # ...
 ```
+
+## In SSH connections
 
 You can add the following line to the `$HOME/.ssh/ssh_config` file to use the HTTP or SOCKS proxies in your SSH connections.
 
