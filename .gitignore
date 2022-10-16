@@ -1,4 +1,7 @@
 .idea
 .env
 .docker
+**/*.pem
+**/*.crt
+**/*.key
 
