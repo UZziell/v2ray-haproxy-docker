@@ -2,12 +2,16 @@ version: "3"
 
 services:
   v2ray:
-    image: ghcr.io/miladrahimi/v2ray:latest
+    image: v2fly/v2fly-core:v5.1.0
     container_name: v2ray_upstream
     restart: always
-    command: [ "v2ray", "-config=/etc/v2ray/config.json" ]
+    command: [ "v2ray","run", "-c", "/etc/v2ray/config.json" ]
     ports:
-      - ${VMESS_PORT:-1310}:1310
+      - 81:81
+      - 82:82
+      - 83:83
+      - 84:84
+      - 85:85
+      - 86:86
     volumes:
       - ./config/:/etc/v2ray/
-      - ./logs:/var/log/v2ray/

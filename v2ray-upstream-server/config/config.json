@@ -1,48 +1,185 @@
 {
   "log": {
-    "access": "/var/log/v2ray/access.log",
-    "error": "/var/log/v2ray/error.log",
     "loglevel": "warning"
   },
-  "inbound": {
-    "listen": "0.0.0.0",
-    "port": 1310,
-    "protocol": "vmess",
-    "settings": {
-      "clients": [
-        {
-          "id": "<UPSTREAM-UUID>",
-          "alterId": 10,
-          "security": "auto"
+  "inbounds": [
+    {
+      "tag": "vmess-ws",
+      "port": 81,
+      "protocol": "vmess",
+      "settings": {
+        "clients": [
+          {
+            "id": "<UUID>",
+            "alterId": 65
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "ws",
+        "wsSettings": {
+          "path": "/discussion/",
+          "headers": {
+            "Host": "ninisite.com"
+          }
         }
-      ]
+      }
     },
-    "streamSettings": {
-      "network": "ws"
-    }
-  },
-  "outbound": {
-    "protocol": "freedom"
-  },
-  "inboundDetour": null,
-  "outboundDetour": [
+    {
+      "tag": "shadowsocks-ws",
+      "port": 82,
+      "protocol": "shadowsocks",
+      "settings": {
+        "method": "aes-128-gcm",
+        "ota": true,
+        "password": "<SHADOWSOCKS_PASSWORD>"
+      },
+      "streamSettings": {
+        "network": "ws",
+        "wsSettings": {
+          "path": "/topics/sounds/mazhabi/",
+          "headers": {
+            "Host": "download.ir"
+          }
+        }
+      }
+    },
+    {
+      "tag": "vless-ws",
+      "port": 83,
+      "protocol": "vless",
+      "settings": {
+        "clients": [
+          {
+            "id": "<UUID>",
+            "level": 0
+          }
+        ],
+        "decryption": "none"
+      },
+      "streamSettings": {
+        "network": "ws",
+        "wsSettings": {
+          "connectionReuse": true,
+          "path": "/Play/",
+          "headers": {
+            "Host": "sound.tebyan.net"
+          }
+        }
+      }
+    }//,
+    // {
+    //   "tag": "vmess-ws-tls",
+    //   "port": 84,
+    //   "protocol": "vmess",
+    //   "settings": {
+    //     "clients": [
+    //       {
+    //         "id": "<UUID>",
+    //         "security": "none"
+    //       }
+    //     ]
+    //   },
+    //   "streamSettings": {
+    //     "network": "ws",
+    //     "wsSettings": {
+    //       "path": "/websock"
+    //     }
+    //   },
+    //   "security": "tls",
+    //   "tlsSettings": {
+    //     "certificates": [
+    //       {
+    //         "certificateFile": "/etc/v2ray/domain.crt",
+    //         "keyFile": "/etc/v2ray/domain.crt"
+    //       }
+    //     ]
+    //   }
+    // },
+    // {
+    //   "tag": "vmess-tcp-tls",
+    //   "port": 85,
+    //   "protocol": "vmess",
+    //   "settings": {
+    //     "clients": [
+    //       {
+    //         "id": "<UUID>",
+    //         "alterId": 65
+    //       }
+    //     ]
+    //   },
+    //   "streamSettings": {
+    //     "network": "tcp",
+    //     "security": "tls",
+    //     "tlsSettings": {
+    //       "certificates": [
+    //         {
+    //           "certificateFile": "/etc/v2ray/domain.crt",
+    //           "keyFile": "/etc/v2ray/domain.key"
+    //         }
+    //       ]
+    //     }
+    //   }
+    // },
+    // {
+    //   "tag": "vmess-h2-tls",
+    //   "port": 86,
+    //   "protocol": "vmess",
+    //   "settings": {
+    //     "clients": [
+    //       {
+    //         "id": "<UUID>",
+    //         "alterId": 65
+    //       }
+    //     ]
+    //   },
+    //   "streamSettings": {
+    //     "network": "h2",
+    //     "httpSettings": {
+    //       "path": "/bypass",
+    //       "acceptProxyProtocol": true
+    //     },
+    //     "security": "tls",
+    //     "tlsSettings": {
+    //       "certificates": [
+    //         {
+    //           "serverName": "h2.varzesh3.com",
+    //           "certificateFile": "/etc/v2ray/domain.crt",
+    //           "keyFile": "/etc/v2ray/domain.key"
+    //         }
+    //       ]
+    //     }
+    //   }
+    // }
+  ],
+  "outbounds": [
+    {
+      "protocol": "freedom",
+      "settings": {}
+    },
     {
       "protocol": "blackhole",
-      "tag": "blackhole"
+      "settings": {},
+      "tag": "block"
     }
   ],
   "routing": {
-    "domainStrategy": "IPIfNonMatch",
-    "settings": {
-      "rules": [
-        {
-          "type": "field",
-          "outboundTag": "blackhole",
-          "ip": [
-            "geoip:private"
-          ]
-        }
-      ]
-    }
+    "domainStrategy": "AsIs",
+    "rules": [
+      {
+        "type": "field",
+        "outboundTag": "block",
+        "protocol": [
+          "bittorrent"
+        ]
+      },
+      {
+        "type": "field",
+        "ip": [
+          "geoip:private"
+        ],
+        "outboundTag": "block"
+      }
+    ]
   }
 }
