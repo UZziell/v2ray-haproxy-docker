@@ -1,7 +1,7 @@
 version: "3"
 
 services:
-  v2ray:
+  haproxy:
     image: haproxy:lts-bullseye
     container_name: haproxy
     restart: always
