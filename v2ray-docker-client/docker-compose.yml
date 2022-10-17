@@ -15,4 +15,4 @@ services:
       - 1086:1086
       - 8118:8118
     volumes:
-      - ./config/:/etc/v2ray/
+      - ./config/:/etc/v2ray/:ro
