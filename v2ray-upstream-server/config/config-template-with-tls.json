@@ -11,8 +11,7 @@
         "clients": [
           {
             "id": "<UUID>",
-            "alterId": 65,
-            "username": "DefaultUser"
+            "alterId": 65
           }
         ]
       },
@@ -53,8 +52,7 @@
         "clients": [
           {
             "id": "<UUID>",
-            "level": 0,
-            "username": "DefaultUser"
+            "level": 0
           }
         ],
         "decryption": "none"
@@ -67,6 +65,89 @@
           "headers": {
             "Host": "sound.tebyan.net"
           }
+        }
+      }
+    },
+    {
+      "tag": "vmess-ws-tls",
+      "port": 84,
+      "protocol": "vmess",
+      "settings": {
+        "clients": [
+          {
+            "id": "<UUID>",
+            "security": "none"
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "ws",
+        "wsSettings": {
+          "path": "/websock"
+        }
+      },
+      "security": "tls",
+      "tlsSettings": {
+        "certificates": [
+          {
+            "certificateFile": "/etc/v2ray/domain.crt",
+            "keyFile": "/etc/v2ray/domain.crt"
+          }
+        ]
+      }
+    },
+    {
+      "tag": "vmess-tcp-tls",
+      "port": 85,
+      "protocol": "vmess",
+      "settings": {
+        "clients": [
+          {
+            "id": "<UUID>",
+            "alterId": 65
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "tls",
+        "tlsSettings": {
+          "certificates": [
+            {
+              "certificateFile": "/etc/v2ray/domain.crt",
+              "keyFile": "/etc/v2ray/domain.key"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "tag": "vmess-h2-tls",
+      "port": 86,
+      "protocol": "vmess",
+      "settings": {
+        "clients": [
+          {
+            "id": "<UUID>",
+            "alterId": 65
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "h2",
+        "httpSettings": {
+          "path": "/bypass",
+          "acceptProxyProtocol": true
+        },
+        "security": "tls",
+        "tlsSettings": {
+          "certificates": [
+            {
+              "serverName": "h2.varzesh3.com",
+              "certificateFile": "/etc/v2ray/domain.crt",
+              "keyFile": "/etc/v2ray/domain.key"
+            }
+          ]
         }
       }
     }

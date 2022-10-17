@@ -31,6 +31,33 @@
       }
     },
     {
+      "tag": "1084",
+      "port": 1084,
+      "listen": "127.0.0.1",
+      "protocol": "socks",
+      "settings": {
+        "udp": false
+      }
+    },
+    {
+      "tag": "1085",
+      "port": 1085,
+      "listen": "127.0.0.1",
+      "protocol": "socks",
+      "settings": {
+        "udp": false
+      }
+    },
+    {
+      "tag": "1086",
+      "port": 1086,
+      "listen": "127.0.0.1",
+      "protocol": "socks",
+      "settings": {
+        "udp": false
+      }
+    },
+    {
       "tag": "http",
       "port": 8118,
       "protocol": "http",
@@ -76,7 +103,7 @@
         "servers": [
           {
             "address": "<BRIDGE-DOMAIN-OR-IP>",
-            "port": 80,
+            "port": 100,
             "method": "aes-128-gcm",
             "password": "<SHADOWSOCKS_PASSWORD>"
           }
@@ -129,6 +156,90 @@
       }
     },
     {
+      "tag": "vmess-ws-tls",
+      "protocol": "vmess",
+      "settings": {
+        "vnext": [
+          {
+            "address": "<BRIDGE-DOMAIN>",
+            "port": 84,
+            "users": [
+              {
+                "id": "<UUID>",
+                "security": "none"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "ws",
+        "wsSettings": {
+          "path": "/websock"
+        },
+        "security": "tls"
+      },
+      "mux": {
+        "enabled": true
+      }
+    },
+    {
+      "tag": "vmess-tcp-tls",
+      "protocol": "vmess",
+      "settings": {
+        "vnext": [
+          {
+            "address": "<BRIDGE-DOMAIN>",
+            "port": 85,
+            "users": [
+              {
+                "id": "<UUID>",
+                "security": "none"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "tls"
+      },
+      "mux": {
+        "enabled": true
+      }
+    },
+    {
+      "tag": "vmess-h2-tls",
+      "protocol": "vmess",
+      "settings": {
+        "vnext": [
+          {
+            "address": "<BRIDGE-DOMAIN>",
+            "port": 86,
+            "users": [
+              {
+                "id": "<UUID>",
+                "alterId": 65
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "h2",
+        "httpSettings": {
+          "path": "/bypass"
+        },
+        "security": "tls",
+        "tlsSettings": {
+          "serverName": "h2.varzesh3.com"
+        }
+      },
+      "mux": {
+        "enabled": true
+      }
+    },
+    {
       "protocol": "freedom",
       "settings": {},
       "tag": "direct"
@@ -147,21 +258,35 @@
         },
         {
           "type": "field",
-          "outboundTag": "shadowsocks-ws",
+          "outboundTag": "vmess-ws-tls",
           "inboundTag": [
             "1082"
           ]
         },
         {
           "type": "field",
-          "outboundTag": "vless-ws",
+          "outboundTag": "wmess-tcp-tls",
           "inboundTag": [
             "1083"
           ]
         },
         {
           "type": "field",
-          "outboundTag": "vmess-ws",
+          "outboundTag": "vmess-h2-tls",
+          "inboundTag": [
+            "1084"
+          ]
+        },
+        {
+          "type": "field",
+          "outboundTag": "shadowsocks-ws",
+          "inboundTag": [
+            "1085"
+          ]
+        },
+        {
+          "type": "field",
+          "outboundTag": "vless-ws",
           "inboundTag": [
             "http"
           ]
