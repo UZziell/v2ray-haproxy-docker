@@ -9,3 +9,4 @@
 v2ray-docker-client/config/config.json
 v2ray-upstream-server/config/config.json
 haproxy-bridge-server/haproxy.cfg
+v2ray-data
