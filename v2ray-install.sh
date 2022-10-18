@@ -72,6 +72,7 @@ function installQuestions() {
 	echo ""
 	echo "I need to ask you a few questions before starting the setup."
 	echo "You can use the default values if they are correct and just press Enter"
+	echo "Ready to use QRCode and URLs for Vmess, Shadowsocks and Vless will be auto-generated after setup is finished"
 	echo ""
 
     # detect server type (bridge or upstream)
@@ -254,18 +255,18 @@ function installConfigRun() {
 		 'net': 'ws', 'path': '$VMESS_PATH', 'port': '80', 'ps': 'voila! VMESS', 'tls': '', 'type': 'none', 'v': '2'}" | base64 -w 0)")
 		generateQRandPrint "vmess" $VMESS_URL
 
-		# SHADOWSOCKS READ MORE ABOUT SS URI SCHEME at https://github.com/shadowsocks/shadowsocks-org/wiki/SIP002-URI-Scheme
-		SHADOWSOCKS_HOST=$(jq -r '(.inbounds[] | select(.protocol | match("^(shadowsocks)$")) | .streamSettings.wsSettings.headers.Host)' $V2RAY_SERVER_CONFIG)
-		SHADOWSOCKS_PATH=$(jq -r '(.inbounds[] | select(.protocol | match("^(shadowsocks)$")) | .streamSettings.wsSettings.path)' $V2RAY_SERVER_CONFIG)
-		SHADOWSOCKS_METHOD=$(jq -r '(.inbounds[] | select(.protocol | match("^(shadowsocks)$")) | .settings.method)' $V2RAY_SERVER_CONFIG)
-		SHADOWSOCKS_URL=$(echo -n "ss://$(echo -n ${SHADOWSOCKS_METHOD}:${SHADOWSOCKS_PASSWORD} | base64 -w0)@${BRIDGE_PUB_ADDRESS}:80/?plugin=v2ray-plugin;host=${SHADOWSOCKS_HOST};path=${SHADOWSOCKS_PATH}#Shadowsocks")
-		generateQRandPrint "shadowsocks" $SHADOWSOCKS_URL
-
 		# VLESS
 		VLESS_HOST=$(jq -r '(.inbounds[] | select(.protocol | match("^(vless)$")) | .streamSettings.wsSettings.headers.Host)' $V2RAY_SERVER_CONFIG)
 		VLESS_PATH=$(jq -r '(.inbounds[] | select(.protocol | match("^(vless)$")) | .streamSettings.wsSettings.path)' $V2RAY_SERVER_CONFIG)
 		VLESS_URL=$(echo -n "vless://${UUID}@${BRIDGE_PUB_ADDRESS}:80?type=ws&path=${VLESS_PATH}&host=${VLESS_HOST}#VLESS")
 		generateQRandPrint "vless" $VLESS_URL
+
+		# SHADOWSOCKS READ MORE ABOUT SS URI SCHEME at https://github.com/shadowsocks/shadowsocks-org/wiki/SIP002-URI-Scheme
+		SHADOWSOCKS_HOST=$(jq -r '(.inbounds[] | select(.protocol | match("^(shadowsocks)$")) | .streamSettings.wsSettings.headers.Host)' $V2RAY_SERVER_CONFIG)
+		SHADOWSOCKS_PATH=$(jq -r '(.inbounds[] | select(.protocol | match("^(shadowsocks)$")) | .streamSettings.wsSettings.path)' $V2RAY_SERVER_CONFIG)
+		SHADOWSOCKS_METHOD=$(jq -r '(.inbounds[] | select(.protocol | match("^(shadowsocks)$")) | .settings.method)' $V2RAY_SERVER_CONFIG)
+		SHADOWSOCKS_URL=$(echo -n "ss://$(echo -n ${SHADOWSOCKS_METHOD}:${SHADOWSOCKS_PASSWORD} | base64 -w0)@${BRIDGE_PUB_ADDRESS}:80/?plugin=v2ray-plugin;mux=0;mode=websocket;host=${SHADOWSOCKS_HOST};path=${SHADOWSOCKS_PATH}#Shadowsocks")
+		generateQRandPrint "shadowsocks" $SHADOWSOCKS_URL
 
 		colorEcho ${YELLOW} "Saved DefaultUser's configs to '$DATA_DIR/v2ray-defaultUser'  for later use\n"
 
@@ -330,8 +331,14 @@ function showClientConfig() {
 }
 
 function uninstallV2ray() {
-	rm -rf $DATA_DIR
-	docker-compose --project-directory v2ray-upstream-server down
+	until [[ ${CONFIRM_UNINSTALL} =~ ^(y|n)$ ]]; do
+		read -rp "Uninstalling, are you sure? (y/n) " -e -i "n" CONFIRM_UNINSTALL
+	done
+	if [[ $CONFIRM_UNINSTALL == "y" ]]; then 
+		rm -rf $DATA_DIR
+		docker-compose --project-directory v2ray-upstream-server down
+		colorEcho ${GREEN} "Uninstalled V2Ray from $SERVER_TYPE Server."
+	fi
 
 }
 
