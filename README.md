@@ -1,54 +1,55 @@
-# V2Ray Docker Compose
+# V2Ray installer for a two VPS setup
 
-This repository contains sample Docker Compose files to run V2Ray upstream and bridge servers.
+**This project is a bash script that aims to setup a [V2Ray](https://www.v2fly.org/en_US/) Proxy on a Linux servers, as easily as possible!**
 
-## Documentation
+The readme might look a liitle verbose to make it easy to build on top of it. You can simply skip to terminology and usage. <br>
+V2fly (a community-driven edition of V2Ray) is not a proxy itself, it's a modular platform for proxies that make it possible to setup different combinations of **Proxy Protocls (like ShadowSocks, Vmess, Vless, Trojan,...)** and **Transports (like TCP, Websocket(ws), TLS, HTTP2 ...)** proxies. Currently this combinations are the default ones: **vmess-ws, shadowsocks-ws and vless-ws**.
 
-### Terminology
+Note: Since these transports overlap, you might be using more than one of them at a time. For example vmess-ws-TLS uses vmess as proxy protocol, websocket as transport and wraps the whole thing in TLS for security. 
+
+## Requirements
+* Two VPS servers. A domestic VPS hosted in your country and a none-domestic one hosted elsewhere.
+
+* docker and docker-compose should be installed and running on those servers. Instruction to install:
+    * **docker**
+        * If your OS has snap installed, probably installing docker with the following command is the easiest way.
+            ```bash
+            sudo snap install docker
+            ```
+        * If not, follow [Install Docker Engine
+](https://docs.docker.com/engine/install/#server). You may take a look at [Post-installation steps for Linux](https://docs.docker.com/engine/install/linux-postinstall/) to add your user to docker group as well.
+
+    * **docker-compose** Download the binary (compatible with the installed docker engine in previous step) [Install Docker Compose](https://docs.docker.com/compose/install/)
+    
+        Note: If installed docker via snap, docker-compose is also installed with it.
+
+## Terminology
 
 * Upstream Server: A server that has free access to the Internet.
-* Bridge Server: A server that is available to clients and has access to the upstream server.
+* Bridge Server: A server that is available to clients and has access to the upstream server. HAProxy runs here. This server acts only as a layer4 TCP or layer7 HTTP relay(i.e recieves client request => forwards request to Upstream server => recieve response from upstream => forwards response to client )
 * Client: A user-side application with access to the bridge server.
 
 ```
-(Client) <-> [ Bridge Server ] <-> [ Upstream Server ] <-> (Internet)
+(Client) <-> [ Bridge Server (HAProxy) ] <-> [ Upstream Server (V2Ray) ] <-> (Internet)
 ```
 
-### Setup
+## Usage
+### Server
+Clone the repo and execute the insall script on both bridge and upstream server. Answer the questions asked by the script and it will take care of the rest.
 
-#### UUIDs
+```bash
+$ git clone https://github.com/UZziell/v2ray-haproxy-docker
+$ cd v2ray-haproxy-docker
+$ chmod +x v2ray-install.sh
+$ sudo ./v2ray-install.sh
+```
 
-V2Ray uses the VMESS protocol as the primary protocol.
-The VMESS protocol requires UUIDs for security reasons (instead of passwords).
-We need two UUIDs for the two V2Ray servers (upstream and bridge servers).
 
-You can generate UUIDs using:
-* This Linux command: ```cat /proc/sys/kernel/random/uuid```
-* This online tool: [https://www.uuidgenerator.net](https://www.uuidgenerator.net)
 
-Sample generated UUIDs:
-* `cfc3ac34-a70d-424e-b43c-33049cf4bf31`
-* `143d98d8-ac89-465a-acb5-d8d51e1f851f`
+Run the script again to add or remove clients!
 
-#### Upstream Server
 
-To setup the upstream server:
-1. Copy the "v2ray-upstream-server" directory into the upstream server.
-2. Replace `<UPSTREAM-UUID>` in the `config.json` file with one of the generated UUIDs.
-3. Run `docker-compose up -d`.
-
-#### Bridge Server
-
-To setup the bridge server:
-1. Copy the "v2ray-bridge-server" directory into the bridge server.
-2. Replace the following variables in the `config.json` file with appropriate values.
-    * `<SHADOWSOCKS-PASSWORD>`: A password for Shadowsocks users like `!FR33DoM!`.
-    * `<BRIDGE-UUID>`: The generated UUID for the bridge server.
-    * `<UPSTREAM-IP>`: The upstream server IP address like `13.13.13.13`.
-    * `<UPSTREAM-UUID>`: The used UUID for the upstream server.
-3. Run `docker-compose up -d`. 
-
-#### Clients
+### Client
 
 The bridge server exposes these proxy protocols:
 * Shadowsocks
@@ -96,12 +97,4 @@ Level: 0
 Security/Method/Encryption: aes-128-gcm
 Network: TCP
 ```
-
-##### HTTP & SOCKS Protocols
-
-Moved here: [HTTP_SOCKS_PROTOCOLS.md](HTTP_SOCKS_PROTOCOLS.md)
-
-## P.S.
-
-This repository is kind of forked from [v2ray-config-examples](https://github.com/xesina/v2ray-config-examples).
-Thanks to [@xesina](https://github.com/xesina) and other contributors.
+<p align="right">(<a href="#top">back to top</a>)</p>
