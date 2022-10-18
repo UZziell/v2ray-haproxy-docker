@@ -137,7 +137,7 @@ function installQuestions() {
 }
 
 function installPackages(){
-	colorEcho ${GREEN} "Installing needed packages. $1"
+	colorEcho ${GREEN} "Installing needed packages: $1"
     if [[ ${OS} == 'ubuntu' ]] || [[ ${OS} == 'debian' && ${VERSION_ID} -gt 10 ]]; then
         apt-get update
         apt-get install -y $1
@@ -164,12 +164,12 @@ function pullDockerImage() {
 	if [[ $1 == "v2ray" ]]; then 
 		docker images | grep '0e75a60ce4c9' || docker-compose --project-directory v2ray-upstream-server pull
 		if [[ $? -ne 0 ]]; then
-			env all_proxy=$http_proxy curl -fSLo $IMAGE_FILE $V2RAY_IMAGE_LINK
-			if [[ $(sha1sum $IMAGE_FILE == 'c088e58adf57e10c0631831f1c5676296a169b94') ]]; then
-				docker image load -i $IMAGE_FILE
+			[[ -e $IMAGE_FILE ]] || env all_proxy=$all_proxy curl -fSLo $IMAGE_FILE $V2RAY_IMAGE_LINK
+			if [[ $(sha1sum $IMAGE_FILE | awk '{print $1}') == 'c088e58adf57e10c0631831f1c5676296a169b94' ]]; then
+				cat $IMAGE_FILE | docker load
 			else
 				colorEcho ${RED} "Could not pull V2Ray image (from github releases)"
-				colorEcho ${YELLOW} "You can try manually donwling $V2RAY_IMAGE_LINK and use 'scp' to copy it to the server,\
+				colorEcho ${YELLOW} "If it keeps failing, your server cannot access github.com. You can try manually donwling $V2RAY_IMAGE_LINK and use 'scp' to copy it to the server,\
 				then use 'docker image load -i v2fly-v2flycore-v5.1.0-0e75a60ce4c9.tar' OR try some other time"
 				exit 1
 			fi
@@ -177,12 +177,12 @@ function pullDockerImage() {
 	elif [[ $1 == "haproxy" ]]; then
 		docker images | grep '6e2d5dace12f' || docker-compose --project-directory haproxy-bridge-server pull
 		if [[ $? -ne 0 ]]; then
-			curl -fsSLo $IMAGE_FILE $HAPROXY_IMAGE_LINK
-			if [[ $(sha1sum $IMAGE_FILE == '6f5422b2d9b97728dfb4091b79d8d4baff0217b6') ]]; then
-				docker image load -i $IMAGE_FILE
+			[[ -e $IMAGE_FILE ]] || env all_proxy=$all_proxy curl -fLo $IMAGE_FILE $HAPROXY_IMAGE_LINK
+			if [[ $(sha1sum $IMAGE_FILE | awk '{print $1}') == '6f5422b2d9b97728dfb4091b79d8d4baff0217b6' ]]; then
+				cat $IMAGE_FILE | docker load
 			else
 				colorEcho ${RED} "Could not pull V2Ray image (from github releases)"
-				colorEcho ${YELLOW} "You can try manually donwling $HAPROXY_IMAGE_LINK and use 'scp' to copy it to the server,\
+				colorEcho ${YELLOW} "If it keeps failing, your server cannot access github.com. You can try manually donwling $HAPROXY_IMAGE_LINK and use 'scp' to copy it to the server,\
 				then use 'docker image load -i haproxy-lts-bullseye-6e2d5dace12f.tar' OR try some other time"
 				exit 1
 			fi
@@ -271,7 +271,7 @@ function installConfigRun() {
 
 
     elif [[ $SERVER_TYPE == "bridge" ]]; then
-        installPackages "moreutils"
+        installPackages "jq"
 		pullDockerImage "haproxy"
 
 		# Prepare HAProxy config
