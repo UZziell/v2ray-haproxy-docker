@@ -76,7 +76,7 @@
             "users": [
               {
                 "id": "<UUID>",
-                "alterId": 65
+                "alterId": 0
               }
             ]
           }
@@ -194,6 +194,7 @@
             "users": [
               {
                 "id": "<UUID>",
+                "alterId": 0,
                 "security": "none"
               }
             ]
@@ -219,7 +220,7 @@
             "users": [
               {
                 "id": "<UUID>",
-                "alterId": 65
+                "alterId": 0
               }
             ]
           }

@@ -49,7 +49,7 @@
             "users": [
               {
                 "id": "<UUID>",
-                "alterId": 65
+                "alterId": 0
               }
             ]
           }
