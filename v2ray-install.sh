@@ -251,7 +251,7 @@ function installConfigRun() {
 		# VMESS
 		VMESS_HOST=$(jq -r '(.inbounds[] | select(.protocol | match("^(vmess)$")) | .streamSettings.wsSettings.headers.Host)' $V2RAY_SERVER_CONFIG)
 		VMESS_PATH=$(jq -r '(.inbounds[] | select(.protocol | match("^(vmess)$")) | .streamSettings.wsSettings.path)' $V2RAY_SERVER_CONFIG)
-		VMESS_URL=$(echo -n "vmess://$(echo -n "{'add': '$BRIDGE_PUB_ADDRESS', 'aid': '65', 'host': '$VMESS_HOST', 'id': '$UUID', \
+		VMESS_URL=$(echo -n "vmess://$(echo -n "{'add': '$BRIDGE_PUB_ADDRESS', 'aid': '0', 'host': '$VMESS_HOST', 'id': '$UUID', \
 		 'net': 'ws', 'path': '$VMESS_PATH', 'port': '80', 'ps': 'voila! VMESS', 'tls': '', 'type': 'none', 'v': '2'}" | base64 -w 0)")
 		generateQRandPrint "vmess" $VMESS_URL
 
