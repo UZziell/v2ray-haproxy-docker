@@ -21,7 +21,7 @@ Note: Since these transports overlap, you might be using more than one of them a
 
     * **docker-compose** Download the binary (compatible with the installed docker engine in previous step) [Install Docker Compose](https://docs.docker.com/compose/install/)
     
-        Note: If installed docker via snap, docker-compose is also installed with it.
+*NOTE: If installed docker via snap, docker-compose is also installed with it.
 
 ## Terminology
 
@@ -38,13 +38,11 @@ Note: Since these transports overlap, you might be using more than one of them a
 Clone the repo and execute the insall script on both bridge and upstream server. Answer the questions asked by the script and it will take care of the rest.
 
 ```bash
-$ git clone https://github.com/UZziell/v2ray-haproxy-docker
-$ cd v2ray-haproxy-docker
-$ chmod +x v2ray-install.sh
-$ sudo ./v2ray-install.sh
+git clone https://github.com/UZziell/v2ray-haproxy-docker;
+cd v2ray-haproxy-docker;
+chmod +x v2ray-install.sh;
+sudo ./v2ray-install.sh
 ```
-
-
 
 Run the script again to add or remove clients!
 

@@ -67,7 +67,7 @@ function initialCheck() {
 }
 
 function installQuestions() {
-	echo "Welcome to the V2Ray installer!"
+	colorEcho ${CYAN} "Welcome to the V2Ray installer!"
 	echo "The git repository is available at: https://github.com/UZziell/v2ray-haproxy-docker"
 	echo ""
 	echo "I need to ask you a few questions before starting the setup."
@@ -234,9 +234,9 @@ function installConfigRun() {
 		# Run V2Ray
 		docker-compose --project-directory v2ray-upstream-server up -d
 		# check if running
-		CID=$(docker-compose --project-directory v2ray-upstream-server ps -q)
+		CID=$(sleep 5 && docker ps --filter=name=v2ray --filter=status=running -q)
 		if [[ -z $CID ]]; then
-			colorEcho {RED} "Container $CONTAINER_NAME not running. Container logs: "
+			colorEcho ${RED} "Container $CONTAINER_NAME not running. Container logs: "
 			docker-compose --project-directory v2ray-upstream-server logs 
 			exit 1
 		fi
@@ -292,9 +292,9 @@ function installConfigRun() {
 		
 		# Run HAProxy
 		docker-compose --project-directory haproxy-bridge-server up -d
-		CID=$(docker-compose --project-directory haproxy-bridge-server ps -q)
+		CID=$(sleep 5 && docker ps --filter=name=haproxy --filter=status=running -q)
 		if [[ -z $CID ]]; then
-			colorEcho {RED} "Container $CONTAINER_NAME not running. Container logs: "
+			colorEcho ${RED} "Container $CONTAINER_NAME not running. Container logs: "
 			docker-compose --project-directory haproxy-bridge-server logs 
 			exit 1
 		fi
@@ -371,9 +371,9 @@ if [[ -e $DATA_DIR/params ]]; then
 	if [[ $SERVER_TYPE == "upstream" ]]; then
 		upstreamManageMenu
 	elif [[ $SERVER_TYPE == "bridge" ]]; then
-		CID=$(docker-compose --project-directory haproxy-bridge-server ps -q)
+		CID=$(docker-compose --project-directory haproxy-bridge-server ps --status running -q)
 		if [[ -z $CID ]]; then
-			colorEcho {RED} "Container $CONTAINER_NAME not running. Container logs: "
+			colorEcho ${RED} "Container $CONTAINER_NAME not running. Container logs: "
 			docker-compose --project-directory haproxy-bridge-server logs 
 			exit 1
 		else
