@@ -3,12 +3,12 @@
 **This project is a bash script that aims to setup a [V2Ray](https://www.v2fly.org/en_US/) Proxy on a Linux servers, as easily as possible!**
 
 The readme might look a liitle verbose to make it easy to build on top of it. You can simply skip to terminology and usage. <br>
-V2fly (a community-driven edition of V2Ray) is not a proxy itself, it's a modular platform for proxies that make it possible to setup different combinations of **Proxy Protocls (like ShadowSocks, Vmess, Vless, Trojan,...)** and **Transports (like TCP, Websocket(ws), TLS, HTTP2 ...)** proxies. Currently this combinations are the default ones: **vmess-ws, shadowsocks-ws and vless-ws**.
+V2fly (a community-driven edition of V2Ray) is not a proxy itself, it's a modular platform for proxies that make it possible to setup different combinations of **Proxy Protocls (like ShadowSocks, Vmess, Vless, Trojan,...)** and **Transports (like TCP, Websocket(ws), TLS, HTTP2 ...)**. Currently this combinations are the default ones: **vmess-ws, shadowsocks-ws and vless-ws**.
 
 Note: Since these transports overlap, you might be using more than one of them at a time. For example vmess-ws-TLS uses vmess as proxy protocol, websocket as transport and wraps the whole thing in TLS for security. 
 
 ## Requirements
-* Two VPS servers. A domestic VPS hosted in your country and a none-domestic one hosted elsewhere.
+* Two VPS servers. A domestic VPS hosted in your country and a non-domestic one hosted elsewhere.
 
 * docker and docker-compose should be installed and running on those servers. Instruction to install:
     * **docker**
