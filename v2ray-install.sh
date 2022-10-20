@@ -2,7 +2,9 @@
 
 # v2ray installer
 # https://github.com/UZziell/v2ray-haproxy-docker
-# with regards to https://github.com/angristan/wireguard-install
+# with regards to:
+#	https://github.com/angristan/wireguard-install
+#	https://github.com/miladrahimi/v2ray-docker-compose
 
 DATA_DIR="$PWD/v2ray-data"
 
