@@ -44,16 +44,15 @@ chmod +x v2ray-install.sh;
 sudo ./v2ray-install.sh
 ```
 
-Run the script again to add or remove clients!
+Run the script again to uninstall the service.
 
 
 ### Client
 
 The bridge server exposes these proxy protocols:
+* VMess
+* Vless
 * Shadowsocks
-* VMESS
-* HTTP
-* SOCKS
 
 ##### Shadowsocks Protocol
 
