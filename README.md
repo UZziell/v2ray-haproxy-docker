@@ -48,50 +48,37 @@ Run the script again to uninstall the service.
 
 
 ### Client
+Scan the generated QRCodes or use the links with app that support the default used protocols(VMess, Vless, Shadowsocks)
 
-The bridge server exposes these proxy protocols:
-* VMess
-* Vless
-* Shadowsocks
 
-##### Shadowsocks Protocol
+##### VMess and Vless Protocol
+In theory any v2ray client should work.
 
-Shadowsocks is a popular proxy protocol.
-You can find many client apps to use the Shadowsocks proxy on your devices.
+Tested clients apps:
+* **Android**: [v2rayNG](https://play.google.com/store/apps/details?id=com.v2ray.ang&hl=en&gl=US)
+
+* **IOS**: [Fair](https://apps.apple.com/us/app/fair-vpn/id1533873488)  - [ShadowLink](https://apps.apple.com/us/app/shadowlink-shadowsocks-vpn/id1439686518)
+
+* **Linux**: v2ray package or [v2fly](https://github.com/v2fly/fhs-install-v2ray)
+
+* **MacOs**: [V2rayU](https://github.com/yanue/V2rayU/tree/master)
+
+* **Windows**: [nekoray](https://github.com/MatsuriDayo/nekoray/releases)
+
+
+
+#### Shadowsocks Protocol
+
 These are recommended client apps:
-* [Shadowsocks for macOS](https://github.com/shadowsocks/ShadowsocksX-NG/releases)
-* [Shadowsocks for Linux](https://github.com/shadowsocks/shadowsocks-libev)
-* [Shadowsocks for Windows](https://github.com/shadowsocks/shadowsocks-windows/releases)
-* [Shadowsocks for Android](https://github.com/shadowsocks/shadowsocks-android/releases)
-* [ShadowLink for iOS](https://apps.apple.com/us/app/shadowlink-shadowsocks-vpn/id1439686518)
+* **Android**: [Shadowsocks](https://play.google.com/store/apps/details?id=com.github.shadowsocks&hl=en&gl=US) + [V2ray Plugin](https://play.google.com/store/apps/details?id=com.github.shadowsocks.plugin.v2ray&hl=en&gl=US)
 
-Client configuration:
-```
-IP Address: <BRIDGE-IP>
-Port: 1210
-Encryption/Method/Algorithm: aes-128-gcm
-Password: <SHADOWSOCKS-PASSWORD>
-```
 
-##### VMESS Protocol
 
-The VMESS proxy protocol is the recommended one.
-It's the primary protocol that V2Ray provides.
-These are recommended client apps:
-* [V2RayX for macOS](https://github.com/Cenmrev/V2RayX/releases)
-* [v2ray-core for Linux](https://github.com/v2ray/v2ray-core)
-* [v2rayN for Windows](https://github.com/2dust/v2rayN/releases)
-* [ShadowLink for iOS](https://apps.apple.com/us/app/shadowlink-shadowsocks-vpn/id1439686518)
-* [v2rayNG for Android](https://github.com/2dust/v2rayNG)
+## P.S.
 
-Client configuration:
-```
-IP Address: <BRIDGE-IP>
-Port: 1310
-ID/UUID/UserID: <BRIDGE-UUID>
-Alter ID: 10
-Level: 0
-Security/Method/Encryption: aes-128-gcm
-Network: TCP
-```
+This repository is kind of forked from [v2ray-docker-compose
+](https://github.com/miladrahimi/v2ray-docker-compose).
+Regards to [@miladrahimi](https://github.com/miladrahimi) and other contributors.
+
 <p align="right">(<a href="#top">back to top</a>)</p>
+
