@@ -43,15 +43,15 @@ cd v2ray-haproxy-docker;
 chmod +x v2ray-install.sh;
 sudo ./v2ray-install.sh
 ```
-
 Run the script again to uninstall the service.
+When the setup is over on the *Upstream* server, 3 QRCodes and URLs **(vmess://, vless://, ss://)** will be generated for clients.
 
 
 ### Client
-Scan the generated QRCodes or use the links with app that support the default used protocols(VMess, Vless, Shadowsocks)
+Scan the generated QRCodes or use the URLs with app that support the default used protocols(VMess, Vless, Shadowsocks)
 
 
-##### VMess and Vless Protocol
+#### VMess and Vless Protocol
 In theory any v2ray client should work.
 
 Tested clients apps:
