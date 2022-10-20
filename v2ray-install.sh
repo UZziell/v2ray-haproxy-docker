@@ -136,7 +136,7 @@ function installQuestions() {
 
 	echo ""
 	colorEcho ${GREEN} "That's all. Setting up $SERVER_TYPE server now!"
-	read -n1 -r -p "Press any key to continue..."; echo
+	# read -n1 -r -p "Press any key to continue..."; echo
 }
 
 function installPackages(){
@@ -159,36 +159,32 @@ function installPackages(){
 
 
 function pullDockerImage() {
-	colorEcho ${GREEN} "Pulling $1 image."
 	IMAGE_FILE="/tmp/image.tar"
-	V2RAY_IMAGE_LINK="https://github.com/UZziell/v2ray-haproxy-docker/releases/download/docker-images/v2fly-v2flycore-v5.1.0-0e75a60ce4c9.tar"
-	HAPROXY_IMAGE_LINK="https://github.com/UZziell/v2ray-haproxy-docker/releases/download/docker-images/haproxy-lts-bullseye-6e2d5dace12f.tar"
-
-	if [[ $1 == "v2ray" ]]; then 
-		docker images | grep '0e75a60ce4c9' || docker-compose --project-directory v2ray-upstream-server pull
-		if [[ $? -ne 0 ]]; then
-			[[ -e $IMAGE_FILE ]] || env all_proxy=$all_proxy curl -fSLo $IMAGE_FILE $V2RAY_IMAGE_LINK
-			if [[ $(sha1sum $IMAGE_FILE | awk '{print $1}') == 'c088e58adf57e10c0631831f1c5676296a169b94' ]]; then
-				cat $IMAGE_FILE | docker load
-			else
-				colorEcho ${RED} "Could not pull V2Ray image (from github releases)"
-				colorEcho ${YELLOW} "If it keeps failing, your server cannot access github.com. You can try manually donwling $V2RAY_IMAGE_LINK and use 'scp' to copy it to the server,\
-				then use 'docker image load -i v2fly-v2flycore-v5.1.0-0e75a60ce4c9.tar' OR try some other time"
-				exit 1
-			fi
-		fi
+	if [[ $1 == "v2ray" ]]; then
+		IMAGE_ID='0e75a60ce4c9'
+		IMAGE_TAR_SHA1SUM='c088e58adf57e10c0631831f1c5676296a169b94'
+		PROJECT_DIR='v2ray-upstream-server'
+		IMAGE_DOWNLOAD_LINK='https://github.com/UZziell/v2ray-haproxy-docker/releases/download/docker-images/v2fly-v2flycore-v5.1.0-0e75a60ce4c9.tar'
 	elif [[ $1 == "haproxy" ]]; then
-		docker images | grep '6e2d5dace12f' || docker-compose --project-directory haproxy-bridge-server pull
-		if [[ $? -ne 0 ]]; then
-			[[ -e $IMAGE_FILE ]] || env all_proxy=$all_proxy curl -fLo $IMAGE_FILE $HAPROXY_IMAGE_LINK
-			if [[ $(sha1sum $IMAGE_FILE | awk '{print $1}') == '6f5422b2d9b97728dfb4091b79d8d4baff0217b6' ]]; then
-				cat $IMAGE_FILE | docker load
-			else
-				colorEcho ${RED} "Could not pull V2Ray image (from github releases)"
-				colorEcho ${YELLOW} "If it keeps failing, your server cannot access github.com. You can try manually donwling $HAPROXY_IMAGE_LINK and use 'scp' to copy it to the server,\
-				then use 'docker image load -i haproxy-lts-bullseye-6e2d5dace12f.tar' OR try some other time"
-				exit 1
-			fi
+		IMAGE_ID='6e2d5dace12f'
+		IMAGE_TAR_SHA1SUM='6f5422b2d9b97728dfb4091b79d8d4baff0217b6'
+		PROJECT_DIR='haproxy-bridge-server'
+		IMAGE_DOWNLOAD_LINK='https://github.com/UZziell/v2ray-haproxy-docker/releases/download/docker-images/haproxy-lts-bullseye-6e2d5dace12f.tar'
+	fi
+
+	colorEcho ${GREEN} "Pulling $1 image."
+
+	docker images | grep $IMAGE_ID || docker-compose --project-directory $PROJECT_DIR pull
+	if [[ $? -ne 0 ]]; then
+		[[ -e $IMAGE_FILE ]] || env all_proxy=$all_proxy curl -fSLo $IMAGE_FILE $IMAGE_DOWNLOAD_LINK
+		if [[ $(sha1sum $IMAGE_FILE | awk '{print $1}') == $IMAGE_TAR_SHA1SUM ]]; then
+			cat $IMAGE_FILE | docker load
+		else
+			colorEcho ${RED} "Could not pull '$1' image from dockerhub or even github releases)"
+			colorEcho ${YELLOW} "If it keeps failing, your server cannot access github.com right now. You can try manually donwling '$IMAGE_DOWNLOAD_LINK' and use 'scp' to copy it to the server,\
+then use 'docker image load -i v2fly-v2flycore-v5.1.0-0e75a60ce4c9.tar' OR try some other time"
+			rm $IMAGE_FILE
+			exit 1
 		fi
 	fi
 }
@@ -237,14 +233,9 @@ function installConfigRun() {
 		# Run V2Ray
 		docker-compose --project-directory v2ray-upstream-server up -d
 		# check if running
-		CID=$(sleep 5 && docker ps --filter=name=v2ray --filter=status=running -q)
-		if [[ -z $CID ]]; then
-			colorEcho ${RED} "Container $CONTAINER_NAME not running. Container logs: "
-			docker-compose --project-directory v2ray-upstream-server logs 
-			exit 1
-		fi
+		sleep 5 && checkContainerRunning "v2ray_upstream"
 
-		colorEcho ${GREEN} "$SERVER_TYPE server setup finished."
+		colorEcho ${GREEN} "$SERVER_TYPE server setup finished successfully"
 		printf "\n\n"
 		read -n1 -r -p "Press any key to show client configs..."; echo
 
@@ -295,12 +286,7 @@ function installConfigRun() {
 		
 		# Run HAProxy
 		docker-compose --project-directory haproxy-bridge-server up -d
-		CID=$(sleep 5 && docker ps --filter=name=haproxy --filter=status=running -q)
-		if [[ -z $CID ]]; then
-			colorEcho ${RED} "Container $CONTAINER_NAME not running. Container logs: "
-			docker-compose --project-directory haproxy-bridge-server logs 
-			exit 1
-		fi
+		sleep 5 && checkContainerRunning "haproxy_bridge"
 		colorEcho ${GREEN} "$SERVER_TYPE server setup finished."
 		colorEcho ${GREEN} "HAProxy stats page url: https://${SERVER_PUB_IP}:6543/stats"
         colorEcho ${GREEN} "username: uzer\npassword: $HAPROXY_STATS_PASSWORD"
@@ -344,6 +330,24 @@ function uninstallV2ray() {
 
 }
 
+function checkContainerRunning() {
+	if [[ $1 == 'v2ray_upstream' ]]; then
+		PROJECT_DIR='v2ray-upstream-server'
+	elif [[ $1 == 'haproxy_bridge' ]]; then
+		PROJECT_DIR='haproxy-bridge-server'
+	fi
+
+	CID=$(docker ps --filter=name=$1 --filter=status=running -q)
+	if [[ -z $CID ]]; then
+		colorEcho ${RED} "Container $1 does not exist or is not running. Container logs: "
+		docker-compose --project-directory $PROJECT_DIR logs 
+		colorEcho ${YELLOW} "If you keep seeing this as startup, try uninstalling the service and install again\n\n"
+
+		# exit unless second parameter is 'noexit'
+		[[ $2 == "noexit" ]] || exit 1
+	fi
+}
+
 function upstreamManageMenu() {
 	echo "Welcome to the V2Ray-install!"
 	echo "The git repository is available at: https://github.com/UZziell/v2ray-haproxy-docker"
@@ -378,23 +382,17 @@ initialCheck
 if [[ -e $DATA_DIR/params ]]; then
 	source $DATA_DIR/params
 	if [[ $SERVER_TYPE == "upstream" ]]; then
+		checkContainerRunning 'v2ray_upstream' 'noexit'
 		upstreamManageMenu
 	elif [[ $SERVER_TYPE == "bridge" ]]; then
-		CID=$(docker-compose --project-directory haproxy-bridge-server ps --status running -q)
-		if [[ -z $CID ]]; then
-			colorEcho ${RED} "Container $CONTAINER_NAME not running. Container logs: "
-			docker-compose --project-directory haproxy-bridge-server logs 
-			exit 1
-		else
-			colorEcho ${GREEN} "HAProxy is running and '$UPSTREAM_PUB_IP' is configured as it's Upstream"
-				until [[ ${UNINSTALL_BRIDGE} =~ ^(y|n)$ ]]; do
-					read -rp "Do you want to uninstall it?  (y/n) " -e -i "n" UNINSTALL_BRIDGE
-				done
-				if [[ $UNINSTALL_BRIDGE == "y" ]]; then 
-					docker-compose --project-directory haproxy-bridge-server down && rm -rf $DATA_DIR
-					colorEcho ${GREEN} "Uninstalled HAProxy from Bridge Server."
-				fi
-
+		checkContainerRunning 'haproxy_bridge' 'noexit'
+		colorEcho ${GREEN} "HAProxy is running and '$UPSTREAM_PUB_IP' is configured as it's Upstream"
+		until [[ ${UNINSTALL_BRIDGE} =~ ^(y|n)$ ]]; do
+			read -rp "Do you want to uninstall it?  (y/n) " -e -i "n" UNINSTALL_BRIDGE
+		done
+		if [[ $UNINSTALL_BRIDGE == "y" ]]; then 
+			docker-compose --project-directory haproxy-bridge-server down && rm -rf $DATA_DIR
+			colorEcho ${GREEN} "Uninstalled HAProxy from Bridge Server."
 		fi
 	fi
 
