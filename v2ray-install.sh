@@ -225,8 +225,8 @@ function parseConfig() {
 			VLESS_URL_DIRECT=$(echo -n "vless://${UUID}@${SERVER_PUB_IP}:${PORT}?type=ws&path=${WS_PATH}&host=${WS_HOST}#VLESS-Direct")
 
 			if [[ $TLS_SNI != 'null' ]]; then 
-				VLESS_URL=$(echo -n "vless://${UUID}@${BRIDGE_PUB_ADDRESS}:443?type=ws&security=tls&encryption=none&host=${VLESS_TLS_SNI}&sni=${VLESS_TLS_SNI}#VLESS-TLS-Bridged")
-				VLESS_URL_DIRECT=$(echo -n "vless://${UUID}@${BRIDGE_PUB_ADDRESS}:${PORT}?type=ws&security=tls&encryption=none&host=${VLESS_TLS_SNI}&sni=${VLESS_TLS_SNI}#VLESS-TLS-Direct")
+				VLESS_URL=$(echo -n "vless://${UUID}@${BRIDGE_PUB_ADDRESS}:443?type=ws&security=tls&encryption=none&host=${TLS_SNI}&sni=${TLS_SNI}#VLESS-TLS-Bridged")
+				VLESS_URL_DIRECT=$(echo -n "vless://${UUID}@${SERVER_PUB_IP}:${PORT}?type=ws&security=tls&encryption=none&host=${TLS_SNI}&sni=${TLS_SNI}#VLESS-TLS-Direct")
 			fi
 			generateQR "vless" $VLESS_URL
 			generateQR "vless" $VLESS_URL_DIRECT
