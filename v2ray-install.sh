@@ -82,6 +82,14 @@ function installQuestions() {
 		read -rp "Which server is this?(bridge or upstream) " -e -i "upstream" SERVER_TYPE
 	done
 
+	# Detect public IPv4 or IPv6 address and pre-fill for the user
+	SERVER_PUB_IP=$(ip -4 addr | sed -ne 's|^.* inet \([^/]*\)/.* scope global.*$|\1|p' | awk '{print $1}' | head -1)
+	if [[ -z ${SERVER_PUB_IP} ]]; then
+		# Detect public IPv6 address
+		SERVER_PUB_IP=$(ip -6 addr | sed -ne 's|^.* inet6 \([^/]*\)/.* scope global.*$|\1|p' | head -1)
+	fi
+	read -rp "Public IPv4 public address(current server): " -e -i "${SERVER_PUB_IP}" SERVER_PUB_IP
+
 	# # Use TLS?
 	# until [[ ${USE_TLS} =~ ^(y|n)$ ]]; do
 	# 	read -rp "Do you have want to enable TLS? You should have a domain and a valid certificate. (y/n) " -e -i "n" USE_TLS
@@ -107,14 +115,6 @@ function installQuestions() {
 		if [[ $USE_TLS == "y" ]]; then
 			colorEcho ${YELLOW} "NOTE: You should create an A or AAAA(in case of IPv6) record for your domain that point to $SERVER_PUB_IP"
 		fi
-
-        # Detect public IPv4 or IPv6 address and pre-fill for the user
-        SERVER_PUB_IP=$(ip -4 addr | sed -ne 's|^.* inet \([^/]*\)/.* scope global.*$|\1|p' | awk '{print $1}' | head -1)
-        if [[ -z ${SERVER_PUB_IP} ]]; then
-            # Detect public IPv6 address
-            SERVER_PUB_IP=$(ip -6 addr | sed -ne 's|^.* inet6 \([^/]*\)/.* scope global.*$|\1|p' | head -1)
-        fi
-        read -rp "Public IPv4 public address(current server): " -e -i "${SERVER_PUB_IP}" SERVER_PUB_IP
 
         # Upstream public IP
         until [[ ${UPSTREAM_PUB_IP} =~ ^([0-9]{1,3}\.){3}[0-9]{1,3}$ ]]; do
@@ -189,14 +189,69 @@ then use 'docker image load -i v2fly-v2flycore-v5.1.0-0e75a60ce4c9.tar' OR try s
 	fi
 }
 
+function generateQR() {
+	colorEcho ${BLUE} "########## $1 client configs(URL & QRCode) ##########"
+	echo -n $2 | qrencode -t ansiutf8 | tee -a $DATA_DIR/v2ray-defaultUser 
+	echo -e "$2\n\n" | tee -a $DATA_DIR/v2ray-defaultUser
+	sleep 2
+}
+
+function parseConfig() {
+	TAG=$1
+	PROTOCOL=$(jq -r "(.inbounds[] | select(.tag | match(\"^($TAG)$\")) | .protocol)" $V2RAY_SERVER_CONFIG)
+	if [[ $PROTOCOL =~ ^(vmess|vless)$ ]]; then
+		PORT=$(jq -r "(.inbounds[] | select(.tag | match(\"^($TAG)$\")) | .port)" $V2RAY_SERVER_CONFIG)
+		WS_HOST=$(jq -r "(.inbounds[] | select(.tag | match(\"^($TAG)$\")) | .streamSettings.wsSettings.headers.Host)" $V2RAY_SERVER_CONFIG)
+		WS_PATH=$(jq -r "(.inbounds[] | select(.tag | match(\"^($TAG)$\")) | .streamSettings.wsSettings.path)" $V2RAY_SERVER_CONFIG)
+		TLS_SNI=$(jq -r "(.inbounds[] | select(.tag | match(\"^($TAG)$\")) | .streamSettings.tlsSettings.serverName)" $V2RAY_SERVER_CONFIG)
+		
+		if [[ $PROTOCOL == 'vmess' ]]; then
+			VMESS_URL=$(echo -n "vmess://$(echo -n "{'add': '$BRIDGE_PUB_ADDRESS', 'aid': '0', 'host': '$WS_HOST', 'id': '$UUID', \
+			'net': 'ws', 'path': '$WS_PATH', 'port': '80', 'ps': 'VMESS-Bridged', 'tls': '', 'type': 'none', 'v': '2'}" | base64 -w 0)")
+			VMESS_URL_DIRECT=$(echo -n "vmess://$(echo -n "{'add': '$SERVER_PUB_IP', 'aid': '0', 'host': '$WS_HOST', 'id': '$UUID', \
+			'net': 'ws', 'path': '$WS_PATH', 'port': '$PORT', 'ps': 'VMESS-Direct', 'tls': '', 'type': 'none', 'v': '2'}" | base64 -w 0)")
+
+			if [[ $TLS_SNI != 'null' ]]; then 
+				VMESS_URL=$(echo -n "vmess://$(echo -n "{'add': '$BRIDGE_PUB_ADDRESS', 'aid': '0', 'host': '$WS_HOST', 'id': '$UUID', \
+				'net': 'ws', 'path': '$WS_PATH', 'port': '443', 'ps': 'VMESS-Bridged', 'tls': 'tls', 'type': 'none', 'v': '2'}" | base64 -w 0)")
+				VMESS_URL_DIRECT=$(echo -n "vmess://$(echo -n "{'add': '$SERVER_PUB_IP', 'aid': '0', 'host': '$WS_HOST', 'id': '$UUID', \
+				'net': 'ws', 'path': '$WS_PATH', 'port': '$PORT', 'ps': 'VMESS-Direct', 'tls': 'tls', 'type': 'none', 'v': '2'}" | base64 -w 0)")
+			fi
+			generateQR "vmess" $VMESS_URL
+			generateQR "vmess" $VMESS_URL_DIRECT
+
+		elif [[ $PROTOCOL == 'vless' ]]; then
+			VLESS_URL=$(echo -n "vless://${UUID}@${BRIDGE_PUB_ADDRESS}:80?type=ws&path=${WS_PATH}&host=${WS_HOST}#VLESS-Bridged")
+			VLESS_URL_DIRECT=$(echo -n "vless://${UUID}@${SERVER_PUB_IP}:${PORT}?type=ws&path=${WS_PATH}&host=${WS_HOST}#VLESS-Direct")
+
+			if [[ $TLS_SNI != 'null' ]]; then 
+				VLESS_URL=$(echo -n "vless://${UUID}@${BRIDGE_PUB_ADDRESS}:443?type=ws&security=tls&encryption=none&host=${VLESS_TLS_SNI}&sni=${VLESS_TLS_SNI}#VLESS-TLS-Bridged")
+				VLESS_URL_DIRECT=$(echo -n "vless://${UUID}@${BRIDGE_PUB_ADDRESS}:${PORT}?type=ws&security=tls&encryption=none&host=${VLESS_TLS_SNI}&sni=${VLESS_TLS_SNI}#VLESS-TLS-Direct")
+			fi
+			generateQR "vless" $VLESS_URL
+			generateQR "vless" $VLESS_URL_DIRECT
+		fi
+
+	# elif [[ $PROTOCOL == 'shadowsocks' ]]; then
+	# 	# SHADOWSOCKS READ MORE ABOUT SS URI SCHEME at https://github.com/shadowsocks/shadowsocks-org/wiki/SIP002-URI-Scheme
+	# 	SHADOWSOCKS_HOST=$(jq -r "(.inbounds[] | select(.tag | match(\"^($TAG)$\")) | .streamSettings.wsSettings.headers.Host)" $V2RAY_SERVER_CONFIG)
+	# 	SHADOWSOCKS_PATH=$(jq -r "(.inbounds[] | select(.tag | match(\"^($TAG)$\")) | .streamSettings.wsSettings.path)" $V2RAY_SERVER_CONFIG)
+	# 	SHADOWSOCKS_METHOD=$(jq -r "(.inbounds[] | select(.tag | match(\"^($TAG)$\")) | .settings.method)" $V2RAY_SERVER_CONFIG)
+	# 	SHADOWSOCKS_URL=$(echo -n "ss://$(echo -n ${SHADOWSOCKS_METHOD}:${SHADOWSOCKS_PASSWORD} | base64 -w0)@${BRIDGE_PUB_ADDRESS}:80/?plugin=v2ray-plugin;mux=0;mode=websocket;host=${SHADOWSOCKS_HOST};path=${SHADOWSOCKS_PATH}#Shadowsocks")
+	# 	generateQR "shadowsocks" $SHADOWSOCKS_URL
+
+	fi
+
+}
+
 function installConfigRun() {
 	mkdir -p $DATA_DIR
 	V2RAY_CLIENT_CONFIG="./v2ray-docker-client/config/config.json"
 	V2RAY_CLIENT_CONFIG_TEMPLATE="./v2ray-docker-client/config/config-template.json"
 	V2RAY_SERVER_CONFIG="./v2ray-upstream-server/config/config.json"
 	V2RAY_SERVER_CONFIG_TEMPLATE="./v2ray-upstream-server/config/config-template.json"
-	V2RAY_SERVER_CERTIFICATE="./v2ray-upstream-server/config/domain.crt"
-	V2RAY_SERVER_CERTIFICATE_KEY="./v2ray-upstream-server/config/domain.key"
+	V2RAY_SERVER_CERTIFICATE="./v2ray-upstream-server/config/certificate.crt"
+	V2RAY_SERVER_CERTIFICATE_KEY="./v2ray-upstream-server/config/certificate.key"
 	HAPROXY_CONFIG="./haproxy-bridge-server/haproxy.cfg"
 	HAPROXY_CONFIG_TEMPLATE="./haproxy-bridge-server/haproxy-template.cfg"
 	HAPROXY_CERTIFICATE="./haproxy-bridge-server/certificate.pem"
@@ -214,6 +269,9 @@ function installConfigRun() {
 		if [[ $USE_TLS == "y" ]]; then
 			cp $CERT_PATH $V2RAY_SERVER_CERTIFICATE 
 			cp $KEY_PATH  $V2RAY_SERVER_CERTIFICATE_KEY
+		else
+            echo "Generating a self-signed certificate for proxy protocols that use TLS as security"
+            openssl req -x509 -newkey rsa:2048 -keyout $V2RAY_SERVER_CERTIFICATE_KEY -out $V2RAY_SERVER_CERTIFICATE -sha256 -nodes -days 365 -subj "/CN=$SERVER_PUB_IP" 2> /dev/null
 		fi
         # prepare V2Ray config files
         export UUID=$(cat /proc/sys/kernel/random/uuid)
@@ -239,28 +297,10 @@ function installConfigRun() {
 		printf "\n\n"
 		read -n1 -r -p "Press any key to show client configs..."; echo
 
-		# Generate user QRCode/URL
-		# Read ws.Host and wsSettings.path from v2ray server config
-		# VMESS
-		VMESS_HOST=$(jq -r '(.inbounds[] | select(.protocol | match("^(vmess)$")) | .streamSettings.wsSettings.headers.Host)' $V2RAY_SERVER_CONFIG)
-		VMESS_PATH=$(jq -r '(.inbounds[] | select(.protocol | match("^(vmess)$")) | .streamSettings.wsSettings.path)' $V2RAY_SERVER_CONFIG)
-		VMESS_URL=$(echo -n "vmess://$(echo -n "{'add': '$BRIDGE_PUB_ADDRESS', 'aid': '0', 'host': '$VMESS_HOST', 'id': '$UUID', \
-		 'net': 'ws', 'path': '$VMESS_PATH', 'port': '80', 'ps': 'voila! VMESS', 'tls': '', 'type': 'none', 'v': '2'}" | base64 -w 0)")
-		generateQRandPrint "vmess" $VMESS_URL
-
-		# VLESS
-		VLESS_HOST=$(jq -r '(.inbounds[] | select(.protocol | match("^(vless)$")) | .streamSettings.wsSettings.headers.Host)' $V2RAY_SERVER_CONFIG)
-		VLESS_PATH=$(jq -r '(.inbounds[] | select(.protocol | match("^(vless)$")) | .streamSettings.wsSettings.path)' $V2RAY_SERVER_CONFIG)
-		VLESS_URL=$(echo -n "vless://${UUID}@${BRIDGE_PUB_ADDRESS}:80?type=ws&path=${VLESS_PATH}&host=${VLESS_HOST}#VLESS")
-		generateQRandPrint "vless" $VLESS_URL
-
-		# SHADOWSOCKS READ MORE ABOUT SS URI SCHEME at https://github.com/shadowsocks/shadowsocks-org/wiki/SIP002-URI-Scheme
-		SHADOWSOCKS_HOST=$(jq -r '(.inbounds[] | select(.protocol | match("^(shadowsocks)$")) | .streamSettings.wsSettings.headers.Host)' $V2RAY_SERVER_CONFIG)
-		SHADOWSOCKS_PATH=$(jq -r '(.inbounds[] | select(.protocol | match("^(shadowsocks)$")) | .streamSettings.wsSettings.path)' $V2RAY_SERVER_CONFIG)
-		SHADOWSOCKS_METHOD=$(jq -r '(.inbounds[] | select(.protocol | match("^(shadowsocks)$")) | .settings.method)' $V2RAY_SERVER_CONFIG)
-		SHADOWSOCKS_URL=$(echo -n "ss://$(echo -n ${SHADOWSOCKS_METHOD}:${SHADOWSOCKS_PASSWORD} | base64 -w0)@${BRIDGE_PUB_ADDRESS}:80/?plugin=v2ray-plugin;mux=0;mode=websocket;host=${SHADOWSOCKS_HOST};path=${SHADOWSOCKS_PATH}#Shadowsocks")
-		generateQRandPrint "shadowsocks" $SHADOWSOCKS_URL
-
+		# Parse server config and generate client QRCode/URL
+		for inbound in $(jq -r '(.inbounds[] | .tag )' $V2RAY_SERVER_CONFIG_TEMPLATE); do
+			parseConfig $inbound
+		done
 		colorEcho ${YELLOW} "Saved DefaultUser's configs to '$DATA_DIR/v2ray-defaultUser'  for later use\n"
 
 
@@ -269,11 +309,12 @@ function installConfigRun() {
 		pullDockerImage "haproxy"
 
 		# Prepare HAProxy config
-		VMESS_HOST=$(jq -r '(.inbounds[] | select(.protocol | match("^(vmess)$")) | .streamSettings.wsSettings.headers.Host)' $V2RAY_SERVER_CONFIG_TEMPLATE)
+		VMESS_HOST=$(jq -r '(.inbounds[] | select(.tag | match("^(vmess-ws)$")) | .streamSettings.wsSettings.headers.Host)' $V2RAY_SERVER_CONFIG_TEMPLATE)
 		SHADOWSOCKS_HOST=$(jq -r '(.inbounds[] | select(.protocol | match("^(shadowsocks)$")) | .streamSettings.wsSettings.headers.Host)' $V2RAY_SERVER_CONFIG_TEMPLATE)
-		VLESS_HOST=$(jq -r '(.inbounds[] | select(.protocol | match("^(vless)$")) | .streamSettings.wsSettings.headers.Host)' $V2RAY_SERVER_CONFIG_TEMPLATE)
-        export HAPROXY_STATS_PASSWORD=$(openssl rand -hex 20) UPSTREAM_PUB_IP VMESS_HOST SHADOWSOCKS_HOST VLESS_HOST
-        envsubst '$HAPROXY_STATS_PASSWORD $UPSTREAM_PUB_IP $VMESS_HOST $SHADOWSOCKS_HOST $VLESS_HOST' < $HAPROXY_CONFIG_TEMPLATE > $HAPROXY_CONFIG
+		VLESS_HOST=$(jq -r '(.inbounds[] | select(.tag | match("^(vless-ws)$")) | .streamSettings.wsSettings.headers.Host)' $V2RAY_SERVER_CONFIG_TEMPLATE)
+		VLESS_TLS_SNI=$(jq -r '(.inbounds[] | select(.tag | match("^(vless-tls)$")) | .streamSettings.tlsSettings.serverName)' $V2RAY_SERVER_CONFIG_TEMPLATE)
+        export HAPROXY_STATS_PASSWORD=$(openssl rand -hex 20) UPSTREAM_PUB_IP VMESS_HOST SHADOWSOCKS_HOST VLESS_HOST VLESS_TLS_SNI
+        envsubst '$HAPROXY_STATS_PASSWORD $UPSTREAM_PUB_IP $VMESS_HOST $SHADOWSOCKS_HOST $VLESS_HOST $VLESS_TLS_SNI' < $HAPROXY_CONFIG_TEMPLATE > $HAPROXY_CONFIG
 
 		# Use entered certificate or generate a self-sign cert for HAProxy
 		if [[ $USE_TLS == "y" ]]; then
@@ -305,13 +346,6 @@ UUID=${UUID}
 SHADOWSOCKS_PASSWORD=${SHADOWSOCKS_PASSWORD}
 EOF
 
-}
-
-function generateQRandPrint() {
-	colorEcho ${BLUE} "########## $1 client configs(URL & QRCode) ##########"
-	echo -n $2 | qrencode -t ansiutf8 | tee -a $DATA_DIR/v2ray-defaultUser 
-	echo -e "$2\n\n" | tee -a $DATA_DIR/v2ray-defaultUser
-	sleep 2
 }
 
 function showClientConfig() {
