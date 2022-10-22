@@ -69,6 +69,34 @@
           }
         }
       }
+    },
+    {
+      "tag": "vless-tls",
+      "port": 13555,
+      "protocol": "vless",
+      "settings": {
+        "clients": [
+          {
+            "id": "<UUID>",
+            "level": 0
+          }
+        ],
+        "decryption": "none"
+      },
+      "streamSettings": {
+        "network": "ws",
+        "security": "tls",
+        "tlsSettings": {
+          "serverName": "www.varzesh3.com",
+          "alpn": ["h2", "http/1.1"],
+          "certificates": [
+            {
+              "certificateFile": "/etc/v2ray/certificate.crt",
+              "keyFile": "/etc/v2ray/certificate.key"
+            }
+          ]
+        }
+      }
     }
   ],
   "outbounds": [

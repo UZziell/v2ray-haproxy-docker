@@ -129,6 +129,36 @@
       }
     },
     {
+      "tag": "vless-tls",
+      "protocol": "vless",
+      "settings": {
+        "vnext": [
+          {
+            "address": "<BRIDGE-DOMAIN-OR-IP>",
+            "port": 443,
+            "users": [
+              {
+                "id": "<UUID>",
+                "level": 0,
+                "encryption": "none"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "ws",
+        "security": "tls",
+        "tlsSettings": {
+          "serverName": "www.varzesh3.com",
+          "allowInsecure": true
+        }
+      },
+      "mux": {
+        "enabled": true
+      }
+    },
+    {
       "protocol": "freedom",
       "settings": {},
       "tag": "direct"
