@@ -9,9 +9,10 @@ services:
       - v2ray.vmess.aead.forced=false
     command: [ "v2ray","run", "-c", "/etc/v2ray/config.json" ]
     ports:
-      - 80:80
-      - 100:100
-      - 1355:1355
+      - 80:80        # vmess
+      - 100:100      # shadowsocks
+      - 1355:1355    # vless
+      - 13555:13555  # vless-tls
       # - 84:84
       # - 85:85
       # - 86:86
