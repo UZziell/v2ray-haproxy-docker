@@ -2,8 +2,7 @@
 
 **This project is a bash script that aims to setup a [V2Ray](https://www.v2fly.org/en_US/) Proxy on a Linux servers, as easily as possible!**
 
-The readme might look a liitle verbose to make it easy to build on top of it. You can simply skip to terminology and usage. <br>
-V2fly (a community-driven edition of V2Ray) is not a proxy itself, it's a modular platform for proxies that make it possible to setup different combinations of **Proxy Protocls (like ShadowSocks, Vmess, Vless, Trojan,...)** and **Transports (like TCP, Websocket(ws), TLS, HTTP2 ...)**. Currently this combinations are the default ones: **vmess-ws, shadowsocks-ws and vless-ws**.
+V2fly (a community-driven edition of V2Ray) is not a proxy itself, it's a modular platform for proxies that make it possible to setup different combinations of **Proxy Protocls (like ShadowSocks, Vmess, Vless, Trojan,...)** and **Transports (like TCP, Websocket(ws), TLS, HTTP2 ...)**. Currently this combinations are the default ones: **vmess-ws, shadowsocks-ws, vless-ws and vless-ws-tls**.
 
 Note: Since these transports overlap, you might be using more than one of them at a time. For example vmess-ws-TLS uses vmess as proxy protocol, websocket as transport and wraps the whole thing in TLS for security. 
 
@@ -44,22 +43,25 @@ chmod +x v2ray-install.sh;
 sudo ./v2ray-install.sh
 ```
 Run the script again to uninstall the service.
-When the setup is over on the *Upstream* server, 3 QRCodes and URLs **(vmess://, vless://, ss://)** will be generated for clients.
+When the setup is over on the *Upstream* server, 3 QRCodes and URLs **(vmess://, vless://, ss://)** will be generated for clients. After added configs in the client app:
+* Those that end in **Bridged** should work all the time (i.e during internet shutdown)
+* Those configs that end with **Direct**, connect directly to the upstream server (the speed is better but only works in "normal" times).
 
 
 ### Client
-Scan the generated QRCodes or use the URLs with app that support the default used protocols(VMess, Vless, Shadowsocks)
-
+Install the appropriate app from the list below and add the server by scanning the QRCode or using the link. 
 
 #### VMess and Vless Protocol
 In theory any v2ray client should work.
 
 Tested clients apps:
-* **Android**: [v2rayNG](https://play.google.com/store/apps/details?id=com.v2ray.ang&hl=en&gl=US)
+* **Android**: [XRAY VPN](https://play.google.com/store/apps/details?id=vpn.v2ray.xray&hl=en&gl=US) - [v2rayNG](https://play.google.com/store/apps/details?id=com.v2ray.ang&hl=en&gl=US)
 
 * **IOS**: [Fair](https://apps.apple.com/us/app/fair-vpn/id1533873488)  - [ShadowLink](https://apps.apple.com/us/app/shadowlink-shadowsocks-vpn/id1439686518)
 
-* **Linux**: v2ray package or [v2fly](https://github.com/v2fly/fhs-install-v2ray)
+* **Linux**:
+    * CLI: v2ray package - [v2fly](https://github.com/v2fly/fhs-install-v2ray)
+    * GUI: [nekoray](https://github.com/MatsuriDayo/nekoray/releases)
 
 * **MacOs**: [V2rayU](https://github.com/yanue/V2rayU/tree/master)
 
