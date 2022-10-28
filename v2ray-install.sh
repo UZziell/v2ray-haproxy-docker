@@ -232,13 +232,13 @@ function parseConfig() {
 			generateQR "vless" $VLESS_URL_DIRECT
 		fi
 
-	# elif [[ $PROTOCOL == 'shadowsocks' ]]; then
-	# 	# SHADOWSOCKS READ MORE ABOUT SS URI SCHEME at https://github.com/shadowsocks/shadowsocks-org/wiki/SIP002-URI-Scheme
-	# 	SHADOWSOCKS_HOST=$(jq -r "(.inbounds[] | select(.tag | match(\"^($TAG)$\")) | .streamSettings.wsSettings.headers.Host)" $V2RAY_SERVER_CONFIG)
-	# 	SHADOWSOCKS_PATH=$(jq -r "(.inbounds[] | select(.tag | match(\"^($TAG)$\")) | .streamSettings.wsSettings.path)" $V2RAY_SERVER_CONFIG)
-	# 	SHADOWSOCKS_METHOD=$(jq -r "(.inbounds[] | select(.tag | match(\"^($TAG)$\")) | .settings.method)" $V2RAY_SERVER_CONFIG)
-	# 	SHADOWSOCKS_URL=$(echo -n "ss://$(echo -n ${SHADOWSOCKS_METHOD}:${SHADOWSOCKS_PASSWORD} | base64 -w0)@${BRIDGE_PUB_ADDRESS}:80/?plugin=v2ray-plugin;mux=0;mode=websocket;host=${SHADOWSOCKS_HOST};path=${SHADOWSOCKS_PATH}#Shadowsocks")
-	# 	generateQR "shadowsocks" $SHADOWSOCKS_URL
+	elif [[ $PROTOCOL == 'shadowsocks' ]]; then
+		# SHADOWSOCKS READ MORE ABOUT SS URI SCHEME at https://github.com/shadowsocks/shadowsocks-org/wiki/SIP002-URI-Scheme
+		SHADOWSOCKS_HOST=$(jq -r "(.inbounds[] | select(.tag | match(\"^($TAG)$\")) | .streamSettings.wsSettings.headers.Host)" $V2RAY_SERVER_CONFIG)
+		SHADOWSOCKS_PATH=$(jq -r "(.inbounds[] | select(.tag | match(\"^($TAG)$\")) | .streamSettings.wsSettings.path)" $V2RAY_SERVER_CONFIG)
+		SHADOWSOCKS_METHOD=$(jq -r "(.inbounds[] | select(.tag | match(\"^($TAG)$\")) | .settings.method)" $V2RAY_SERVER_CONFIG)
+		SHADOWSOCKS_URL=$(echo -n "ss://$(echo -n ${SHADOWSOCKS_METHOD}:${SHADOWSOCKS_PASSWORD} | base64 -w0)@${BRIDGE_PUB_ADDRESS}:80/?plugin=v2ray-plugin;mux=0;mode=websocket;host=${SHADOWSOCKS_HOST};path=${SHADOWSOCKS_PATH}#Shadowsocks")
+		generateQR "shadowsocks" $SHADOWSOCKS_URL
 
 	fi
 
@@ -397,7 +397,6 @@ function upstreamManageMenu() {
 	done
 	case "${MENU_OPTION}" in
 	1)
-		# newClient
 		showClientConfig
 		;;
 	2)
@@ -406,6 +405,11 @@ function upstreamManageMenu() {
 	3)
 		exit 0
 		;;
+
+	# TODO	
+		# newClient
+		# deleteClient
+
 	esac
 }
 
